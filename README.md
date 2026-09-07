@@ -6,34 +6,17 @@ A lightweight, cross-platform toast notification library for React, designed for
 [![npm downloads](https://img.shields.io/npm/dm/glass-toast.svg)](https://www.npmjs.com/package/glass-toast)
 [![License](https://img.shields.io/npm/l/glass-toast.svg)](LICENSE)
 
-## Overview
-
-Glass Toast is a toast notification library built with React and TypeScript.
-
-It is designed with cross-platform support in mind, allowing the same API and architecture to be used across Web and React Native applications.
-
-The project focuses on:
-
-* Simple API
-* TypeScript-first development
-* Cross-platform architecture
-* Lightweight implementation
-* Smooth animations
-* Customizable appearance
-* Accessibility
-* Developer experience
-
 ## Status
 
-> Glass Toast is currently under active development.
+Glass Toast is currently under active development.
 
-The API may change before the first stable release.
-
-Current target:
+The project is currently targeting its first release:
 
 ```text
 v0.1.0
 ```
+
+The API may change before the first stable release.
 
 ## Installation
 
@@ -41,7 +24,7 @@ v0.1.0
 npm install glass-toast
 ```
 
-## Basic Usage
+## Usage
 
 Wrap your application with `ToastProvider`:
 
@@ -65,12 +48,15 @@ import { toast } from "glass-toast";
 toast.success("Account created successfully.");
 ```
 
-Other built-in types:
+### Toast Types
 
 ```tsx
 toast.success("Operation completed.");
+
 toast.error("Something went wrong.");
+
 toast.warning("Please check your information.");
+
 toast.info("A new update is available.");
 ```
 
@@ -78,7 +64,7 @@ toast.info("A new update is available.");
 
 ### `toast.show()`
 
-Create a custom toast.
+Creates a toast with custom options.
 
 ```tsx
 toast.show({
@@ -90,7 +76,7 @@ toast.show({
 
 ### `toast.success()`
 
-Display a success notification.
+Displays a success notification.
 
 ```tsx
 toast.success("Successfully saved.");
@@ -98,7 +84,7 @@ toast.success("Successfully saved.");
 
 ### `toast.error()`
 
-Display an error notification.
+Displays an error notification.
 
 ```tsx
 toast.error("Unable to save your changes.");
@@ -106,7 +92,7 @@ toast.error("Unable to save your changes.");
 
 ### `toast.warning()`
 
-Display a warning notification.
+Displays a warning notification.
 
 ```tsx
 toast.warning("Please review your information.");
@@ -114,7 +100,7 @@ toast.warning("Please review your information.");
 
 ### `toast.info()`
 
-Display an informational notification.
+Displays an informational notification.
 
 ```tsx
 toast.info("A new version is available.");
@@ -122,7 +108,7 @@ toast.info("A new version is available.");
 
 ### `toast.dismiss()`
 
-Dismiss a specific toast.
+Dismisses a specific toast.
 
 ```tsx
 toast.dismiss(toastId);
@@ -130,7 +116,7 @@ toast.dismiss(toastId);
 
 ### `toast.dismissAll()`
 
-Dismiss all active toasts.
+Dismisses all active toasts.
 
 ```tsx
 toast.dismissAll();
@@ -138,7 +124,7 @@ toast.dismissAll();
 
 ## Toast Options
 
-A toast can be customized using options:
+Toasts can be customized using options:
 
 ```tsx
 toast.show({
@@ -150,35 +136,23 @@ toast.show({
 });
 ```
 
-### Available options
+### Available Options
 
 | Option        | Type            | Description                                 |
 | ------------- | --------------- | ------------------------------------------- |
 | `id`          | `string`        | Custom toast identifier                     |
 | `title`       | `string`        | Toast title                                 |
 | `description` | `string`        | Additional information                      |
-| `type`        | `ToastType`     | Visual notification type                    |
+| `type`        | `ToastType`     | Toast notification type                     |
 | `duration`    | `number`        | Time before automatic dismissal             |
 | `position`    | `ToastPosition` | Toast position                              |
 | `dismissible` | `boolean`       | Whether the toast can be manually dismissed |
 | `onPress`     | `function`      | Callback when the toast is pressed          |
 | `onDismiss`   | `function`      | Callback when the toast is dismissed        |
 
-## Toast Types
-
-Glass Toast provides the following built-in types:
-
-```text
-default
-success
-error
-warning
-info
-```
-
 ## Positions
 
-Supported positions:
+Glass Toast supports the following positions:
 
 ```text
 top
@@ -199,7 +173,7 @@ toast.success("Saved successfully.", {
 
 ## Provider Configuration
 
-The provider can define application-wide defaults:
+Application-wide defaults can be configured through `ToastProvider`:
 
 ```tsx
 <ToastProvider
@@ -211,41 +185,32 @@ The provider can define application-wide defaults:
 </ToastProvider>
 ```
 
-Individual toast options can override these defaults.
+Individual toast options can override provider defaults.
 
 ## Cross-platform
 
-Glass Toast is designed to share the same API between:
+Glass Toast is designed to provide a consistent API across:
 
-```text
-Web
-Android
-iOS
-```
+* Web
+* Android
+* iOS
 
-The project uses a cross-platform architecture so that application code does not need to change when moving between platforms.
+The library is built around a cross-platform architecture so that the toast API remains consistent between platforms.
 
-## Architecture
+## Features
 
-The project is divided into several layers:
-
-```text
-Public API
-    ↓
-Toast Manager
-    ↓
-Toast Store
-    ↓
-Toast Provider
-    ↓
-Toast Container
-    ↓
-Toast Component
-```
-
-The core toast logic is kept independent from the presentation layer.
-
-This allows the internal rendering and animation implementation to evolve without unnecessarily changing the public API.
+* TypeScript-first API
+* Success, error, warning, info and default toasts
+* Automatic dismissal
+* Manual dismissal
+* Configurable duration
+* Toast stacking
+* Maximum visible toasts
+* Multiple positions
+* Animations
+* Cross-platform architecture
+* Web support
+* React Native support
 
 ## Development
 
@@ -279,89 +244,16 @@ Build the library:
 npm run build
 ```
 
-## Project Structure
-
-```text
-glass-toast/
-│
-├── src/
-│   ├── components/
-│   ├── context/
-│   ├── core/
-│   ├── hooks/
-│   ├── animations/
-│   ├── types/
-│   ├── constants/
-│   ├── utils/
-│   └── index.ts
-│
-├── playground/
-├── README.md
-├── CONTRIBUTING.md
-├── CODE_OF_CONDUCT.md
-├── SECURITY.md
-├── CHANGELOG.md
-├── LICENSE
-├── package.json
-└── vite.config.ts
-```
-
 ## Contributing
 
 Contributions are welcome.
 
-Before opening a pull request, please read:
+Before contributing, please read the [Contributing Guide](CONTRIBUTING.md).
 
-[CONTRIBUTING.md](CONTRIBUTING.md)
-
-For larger changes, consider opening an issue first so the proposed solution can be discussed before implementation.
-
-## Roadmap
-
-### v0.1.0
-
-* [ ] Basic toast API
-* [ ] Success toast
-* [ ] Error toast
-* [ ] Warning toast
-* [ ] Info toast
-* [ ] Toast provider
-* [ ] Toast dismissal
-* [ ] Automatic dismissal
-* [ ] Toast stacking
-* [ ] Position support
-* [ ] Animations
-* [ ] TypeScript support
-* [ ] Web support
-* [ ] Initial React Native support
-
-### Future
-
-Potential features include:
-
-* Promise-based toasts
-* Loading state
-* Toast updates
-* Action buttons
-* Custom icons
-* Custom components
-* Advanced animations
-* Gesture dismissal
-* Progress indicators
-* Advanced theming
-
-## Versioning
-
-Glass Toast follows Semantic Versioning.
-
-```text
-MAJOR.MINOR.PATCH
-```
-
-Until `1.0.0`, breaking changes may occur between minor versions.
+For larger changes, consider opening an issue first to discuss the proposed approach.
 
 ## License
 
-Glass Toast is open source and available under the MIT License.
+Glass Toast is open source software licensed under the MIT License.
 
 See [LICENSE](LICENSE) for details.
