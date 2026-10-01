@@ -36,7 +36,7 @@ v0.1.0
 Status:
 
 ```text
-In development
+Feature-complete for v0.1.0 — pending publish
 ```
 
 The goal of `v0.1.0` is to establish the initial usable version of the library without introducing unnecessary complexity.
@@ -251,30 +251,36 @@ Avoid adding Zustand, Redux, or another external state-management library unless
 
 # Styling
 
-Glass Toast will use Tailwind CSS through NativeWind for cross-platform styling.
+**Decision:** Glass Toast uses a token-based styling system (`GLASS_TOKENS` + `StyleSheet`) instead of NativeWind/Tailwind.
 
-The goal is to avoid maintaining separate styling systems for Web and React Native.
+Rationale:
 
-Styling should remain:
+* The library ships prebuilt (tsup); requiring consumers to run a NativeWind/Tailwind pipeline for a single component family would raise integration cost for little gain.
+* Tokens give full control over the liquid-glass material (translucency, blur, sheen, depth shadows) on both platforms without class-name translation layers.
+* It follows the dependency philosophy: `nativewind` stays out of the runtime.
+
+Styling remains:
 
 * Predictable.
 * Minimal.
 * Cross-platform.
-* Customizable.
+* Customizable (tokens are exported for custom surfaces; variants/sizes map to metrics tables).
 
 ---
 
 # Animation
 
-Animations will be implemented using React Native Reanimated.
+Animations are implemented with React Native Reanimated.
 
-The animation layer should remain isolated from the core toast logic.
+The animation layer is isolated from the core toast logic (`AnimatedToast`).
 
-The initial animation system should support:
+The initial animation system supports:
 
-* Toast entering.
-* Toast leaving.
-* Toast stacking transitions.
+* Toast entering (spring slide from the screen edge).
+* Toast leaving (timed slide + fade; the store owns the lifecycle and a fallback removal timer).
+* Toast stacking transitions (tuck under the active toast: slide, scale, fade).
+
+Because the library must work on the web without the Worklets Babel plugin, every Reanimated hook call passes an explicit dependency array (valid on web and native).
 
 Advanced gesture-based interactions are outside the initial `v0.1.0` scope.
 
@@ -287,114 +293,113 @@ Advanced gesture-based interactions are outside the initial `v0.1.0` scope.
 * [x] Initialize repository
 * [x] Configure TypeScript
 * [x] Configure Vite
-* [ ] Configure library build
-* [ ] Configure package exports
-* [ ] Configure package metadata
+* [x] Configure library build (tsup)
+* [x] Configure package exports
+* [x] Configure package metadata
 
 ## 2. Cross-platform Foundation
 
-* [ ] Configure React Native Web
-* [ ] Configure NativeWind
-* [ ] Configure Tailwind CSS
-* [ ] Configure Reanimated
-* [ ] Verify Web compatibility
-* [ ] Verify architecture for React Native
+* [x] Configure React Native Web (alias + `__DEV__`/`global` globals)
+* [x] Configure styling tokens (see Styling decision — NativeWind dropped)
+* [x] Configure Reanimated (explicit dependency arrays for web)
+* [x] Verify Web compatibility (playground verified in browser)
+* [x] Verify architecture for React Native (no web-only APIs in the core)
 
 ## 3. Types
 
-* [ ] Create `ToastType`
-* [ ] Create `ToastPosition`
-* [ ] Create `ToastOptions`
-* [ ] Create toast state types
-* [ ] Create provider options
+* [x] Create `ToastType`
+* [x] Create `ToastPosition`
+* [x] Create `ToastOptions`
+* [x] Create toast state types (`ToastEntry`, `ToastConfig`)
+* [x] Create provider options
 
 ## 4. Core Toast System
 
-* [ ] Create toast creation logic
-* [ ] Generate toast IDs
-* [ ] Support toast types
-* [ ] Support title
-* [ ] Support description
-* [ ] Support duration
-* [ ] Support positions
-* [ ] Support dismissible toasts
+* [x] Create toast creation logic
+* [x] Generate toast IDs
+* [x] Support toast types
+* [x] Support title
+* [x] Support description
+* [x] Support duration
+* [x] Support positions
+* [x] Support dismissible toasts
 
 ## 5. Store
 
-* [ ] Create toast store
-* [ ] Add toast
-* [ ] Remove toast
-* [ ] Remove all toasts
-* [ ] Read toast state
-* [ ] Handle maximum visible toasts
+* [x] Create toast store
+* [x] Add toast
+* [x] Remove toast
+* [x] Remove all toasts
+* [x] Read toast state
+* [x] Handle maximum visible toasts
 
 ## 6. Toast Manager
 
-* [ ] Implement `toast.show()`
-* [ ] Implement `toast.success()`
-* [ ] Implement `toast.error()`
-* [ ] Implement `toast.warning()`
-* [ ] Implement `toast.info()`
-* [ ] Implement `toast.dismiss()`
-* [ ] Implement `toast.dismissAll()`
+* [x] Implement `toast.show()`
+* [x] Implement `toast.success()`
+* [x] Implement `toast.error()`
+* [x] Implement `toast.warning()`
+* [x] Implement `toast.info()`
+* [x] Implement `toast.dismiss()`
+* [x] Implement `toast.dismissAll()`
 
 ## 7. React Integration
 
-* [ ] Create Toast Context
-* [ ] Create Toast Provider
-* [ ] Connect provider to store
-* [ ] Create toast hooks
+* [x] Create Toast Context
+* [x] Create Toast Provider
+* [x] Connect provider to store
+* [x] Create toast hooks
 
 ## 8. Components
 
-* [ ] Create Toast component
-* [ ] Create Toast Container
-* [ ] Create Toast Content
-* [ ] Create Toast Icon
-* [ ] Create Toast Close
-* [ ] Verify accessibility
+* [x] Create Toast component (AnimatedToast + GlassSurface)
+* [x] Create Toast Container
+* [x] Create Toast Content
+* [x] Create Toast Icon
+* [x] Create Toast Close
+* [x] Verify accessibility (roles, labels, live region option)
 
 ## 9. Animation
 
-* [ ] Enter animation
-* [ ] Exit animation
-* [ ] Stack transition
-* [ ] Verify animation behavior on Web
+* [x] Enter animation
+* [x] Exit animation
+* [x] Stack transition
+* [x] Verify animation behavior on Web (verified in browser)
 
 ## 10. Visual Design
 
-* [ ] Glass appearance
-* [ ] Default variant
-* [ ] Success variant
-* [ ] Error variant
-* [ ] Warning variant
-* [ ] Info variant
-* [ ] Responsive behavior
+* [x] Glass appearance (liquid glass + depth)
+* [x] Default variant
+* [x] Success variant
+* [x] Error variant
+* [x] Warning variant
+* [x] Info variant
+* [x] Responsive behavior (max width + columns)
 
 ## 11. Customization
 
-* [ ] Provider defaults
-* [ ] Per-toast overrides
-* [ ] Position configuration
-* [ ] Duration configuration
-* [ ] Maximum toast configuration
+* [x] Provider defaults
+* [x] Per-toast overrides
+* [x] Position configuration
+* [x] Duration configuration
+* [x] Maximum toast configuration
 
 ## 12. Public Exports
 
-* [ ] Export `ToastProvider`
-* [ ] Export `toast`
-* [ ] Export public types
-* [ ] Verify package entry point
+* [x] Export `ToastProvider`
+* [x] Export `toast`
+* [x] Export public types
+* [x] Verify package entry point
 
 ## 13. Playground
 
-* [ ] Create development playground
-* [ ] Test every toast type
-* [ ] Test positions
-* [ ] Test dismissal
-* [ ] Test stacking
-* [ ] Test duration
-* [ ] Test provider configuration
+* [x] Create development playground
+* [x] Test every toast type
+* [x] Test positions
+* [x] Test dismissal
+* [x] Test stacking
+* [x] Test duration
+* [x] Test provider configuration
 
 ## 14. Testing
 
@@ -409,33 +414,33 @@ Advanced gesture-based interactions are outside the initial `v0.1.0` scope.
 
 ## 15. Package Configuration
 
-* [ ] Configure package name
-* [ ] Configure version
-* [ ] Configure exports
-* [ ] Configure build output
-* [ ] Configure TypeScript declarations
-* [ ] Configure package files
-* [ ] Verify dependencies and peer dependencies
+* [x] Configure package name
+* [x] Configure version
+* [x] Configure exports
+* [x] Configure build output
+* [x] Configure TypeScript declarations
+* [x] Configure package files
+* [x] Verify dependencies and peer dependencies
 
 ## 16. Build
 
-* [ ] Production build
-* [ ] Type checking
-* [ ] Verify generated files
-* [ ] Verify package size
+* [x] Production build
+* [x] Type checking
+* [x] Verify generated files
+* [x] Verify package size (~32 kB packed)
 
 ## 17. Package Preview
 
-* [ ] Run `npm pack --dry-run`
-* [ ] Inspect package contents
+* [x] Run `npm pack --dry-run`
+* [x] Inspect package contents
 * [ ] Install packed package locally
 * [ ] Test package from another project
 
 ## 18. Release
 
 * [ ] Finalize `v0.1.0`
-* [ ] Update `CHANGELOG.md`
-* [ ] Verify README
+* [x] Update `CHANGELOG.md`
+* [x] Verify README
 * [ ] Create Git tag
 * [ ] Publish package
 * [ ] Create GitHub release
