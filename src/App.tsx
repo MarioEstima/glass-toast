@@ -93,7 +93,7 @@ function useDemoState() {
     stackGap, setStackGap,
     theme, setTheme,
     dismissible, setDismissible,
-    animatedIcon, setAnimatedIcon,
+    animatedIcon, setAnimatedIcon, 
   }
 }
 
