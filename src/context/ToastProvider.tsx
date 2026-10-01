@@ -45,6 +45,11 @@ export function ToastProvider(props: ToastProviderProps) {
     blur = DEFAULT_PROVIDER.blur,
     animatedIcon = DEFAULT_PROVIDER.animatedIcon,
     portal = DEFAULT_PROVIDER.portal,
+    animation = DEFAULT_PROVIDER.animation,
+    borderRadius,
+    width = DEFAULT_PROVIDER.width,
+    fontFamily,
+    iconBadge = DEFAULT_PROVIDER.iconBadge,
     onToastDismiss,
     children,
   } = props
@@ -53,21 +58,21 @@ export function ToastProvider(props: ToastProviderProps) {
 
   // One store for the provider's lifetime; config changes flow through setConfig.
   const store = useMemo(
-    () => createToastStore(resolveProviderDefaults({ position, duration, variant, size }), maxToasts, EXIT_FALLBACK_MS),
+    () => createToastStore(resolveProviderDefaults({ position, duration, variant, size, animation, width, iconBadge, fontFamily, borderRadius }), maxToasts, EXIT_FALLBACK_MS),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
 
   useEffect(() => {
     store.setConfig({
-      providerDefaults: resolveProviderDefaults({ position, duration, variant, size }),
+      providerDefaults: resolveProviderDefaults({ position, duration, variant, size, animation, width, iconBadge, fontFamily, borderRadius }),
       maxToasts,
       onFinalize: (entry) => {
         entry.onDismiss?.()
         onToastDismiss?.(entry)
       },
     })
-  }, [store, position, duration, maxToasts, variant, size, onToastDismiss])
+  }, [store, position, duration, maxToasts, variant, size, animation, width, iconBadge, fontFamily, borderRadius, onToastDismiss])
 
   useEffect(() => () => store.clearTimers(), [store])
 
@@ -99,8 +104,8 @@ export function ToastProvider(props: ToastProviderProps) {
   }, [toasts, store])
 
   const surfaceProps = useMemo(
-    () => ({ scheme, tokens, blur, animatedIcon }),
-    [scheme, tokens, blur, animatedIcon],
+    () => ({ scheme, tokens, blur, animatedIcon, onActionPress: (toast: import('../types/toast').ToastEntry) => store.dismiss(toast.id) }),
+    [scheme, tokens, blur, animatedIcon, store],
   )
 
   const stackProps = useMemo(

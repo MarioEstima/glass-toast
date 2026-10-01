@@ -12,6 +12,23 @@ export type ToastVariant = 'toast' | 'notification' | 'popover' | 'glass'
 /** Size preset controlling icon, text and paddings. */
 export type ToastSize = 'sm' | 'md' | 'lg'
 
+/** Enter/exit animation style. */
+export type ToastAnimation = 'spring' | 'bounce' | 'slide' | 'fade'
+
+/** Toast width behavior: fit the content or fill the max width. */
+export type ToastWidth = 'hug' | 'full'
+
+/** Rendering style of the leading icon badge. */
+export type IconBadgeStyle = 'solid' | 'soft' | 'bare'
+
+/** Call-to-action button rendered inside the toast. */
+export interface ToastAction {
+  /** Button label, e.g. `GOT IT`. */
+  label: string
+  /** Called when the button is pressed; the toast dismisses afterwards. */
+  onPress: () => void
+}
+
 /** Color scheme used to render the glass surface. */
 export type ToastTheme = 'light' | 'dark'
 
@@ -54,17 +71,34 @@ export interface ToastOptions {
   variant?: ToastVariant
   /** Size preset. Overrides the provider default. */
   size?: ToastSize
+  /** Call-to-action button. When present it replaces the close button. */
+  action?: ToastAction
+  /** Enter/exit animation style. Overrides the provider default. */
+  animation?: ToastAnimation
+  /** Corner radius override. `0` uses the variant default. */
+  borderRadius?: number
+  /** Width behavior: `'hug'` fits the content, `'full'` spans the max width. */
+  width?: ToastWidth
+  /** Font family applied to title and description. */
+  fontFamily?: string
+  /** Rendering style of the leading icon badge. */
+  iconBadge?: IconBadgeStyle
   /** Custom icon component rendered instead of the built-in animated one. */
   icon?: ComponentType<ToastIconProps>
   /** Whether the toast is announced to screen readers. */
   accessibilityLive?: 'polite' | 'assertive' | 'off'
 }
 
-export type ToastConfig = Required<Omit<ToastOptions, 'icon' | 'accessibilityLive' | 'onPress' | 'onDismiss'>> & {
+export type ToastConfig = Required<
+  Omit<ToastOptions, 'icon' | 'accessibilityLive' | 'onPress' | 'onDismiss' | 'action' | 'borderRadius'>
+> & {
   icon?: ComponentType<ToastIconProps>
   accessibilityLive: 'polite' | 'assertive' | 'off'
   onPress?: () => void
   onDismiss?: () => void
+  action?: ToastAction
+  /** `0` resolves to the variant's default radius. */
+  borderRadius: number
 }
 
 /** Runtime state of a toast in the store. */
@@ -98,6 +132,12 @@ export interface GlassTokens {
   accents: Record<ToastType, string>
   /** Tint applied behind the glass per toast type. */
   tints: Record<ToastType, string>
+  /** Soft badge background per toast type (circular icon holder). */
+  badgeSoft: Record<ToastType, string>
+  /** Background of the call-to-action button. */
+  actionBg: string
+  /** Text color of the call-to-action button. */
+  actionText: string
 }
 
 /** Material tokens for the solid card variants (toast / notification / popover). */
@@ -114,6 +154,12 @@ export interface SolidTokens {
   close: string
   /** Accent color per toast type. */
   accents: Record<ToastType, string>
+  /** Soft badge background per toast type (circular icon holder). */
+  badgeSoft: Record<ToastType, string>
+  /** Background of the call-to-action button. */
+  actionBg: string
+  /** Text color of the call-to-action button. */
+  actionText: string
 }
 
 /** Resolved theme tokens consumed by the presentation components. */
@@ -134,6 +180,16 @@ export interface ToastProviderProps {
   variant?: ToastVariant
   /** Size preset applied by default. Default: `'md'`. */
   size?: ToastSize
+  /** Default enter/exit animation. Default: `'spring'`. */
+  animation?: ToastAnimation
+  /** Corner radius override for every toast. `0` uses each variant's default. */
+  borderRadius?: number
+  /** Default width behavior. Default: `'full'`. */
+  width?: ToastWidth
+  /** Default font family for title and description. */
+  fontFamily?: string
+  /** Default icon badge style. Default: `'solid'`. */
+  iconBadge?: IconBadgeStyle
   /** Color scheme: `'system'` follows the OS appearance. Default: `'system'`. */
   theme?: ToastTheme | 'system'
   /** Glass depth layering between toasts. Default: `'stack'`. */

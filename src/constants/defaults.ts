@@ -1,5 +1,6 @@
 import type {
   StackGap,
+  ToastAnimation,
   ToastProviderProps,
   ToastSize,
   ToastThemeTokens,
@@ -7,95 +8,131 @@ import type {
 } from '../types/toast'
 
 /**
- * Material palettes per color scheme.
+ * Material palettes per color scheme — fully OPAQUE pastel surfaces.
  *
- * - `glass`: translucent liquid-glass material with sheen, inner ring and
- *   backdrop blur on web.
- * - `solid`: opaque soft cards used by the toast / notification / popover
+ * - `glass`: kept for the `glass` variant (soft pastel tint, no blur needed
+ *   since the base is opaque).
+ * - `solid`: pastel pill cards used by the toast / notification / popover
  *   variants.
  */
 export const GLASS_TOKENS: Record<'light' | 'dark', ToastThemeTokens> = {
   light: {
     glass: {
-      surface: 'rgba(255, 255, 255, 0.62)',
-      surfaceHighlight: 'rgba(255, 255, 255, 0.55)',
-      border: 'rgba(255, 255, 255, 0.8)',
-      text: '#0B1220',
-      textMuted: 'rgba(15, 23, 42, 0.62)',
-      close: 'rgba(15, 23, 42, 0.45)',
+      surface: '#F4F1FF',
+      surfaceHighlight: 'rgba(255, 255, 255, 0.6)',
+      border: '#E4DEF9',
+      text: '#3B3663',
+      textMuted: 'rgba(59, 54, 99, 0.62)',
+      close: 'rgba(59, 54, 99, 0.45)',
       accents: {
-        default: 'rgba(71, 85, 105, 0.95)',
-        success: 'rgba(5, 150, 105, 0.95)',
-        error: 'rgba(220, 38, 38, 0.95)',
-        warning: 'rgba(180, 83, 9, 0.95)',
-        info: 'rgba(29, 78, 216, 0.95)',
+        default: '#8B87A8',
+        success: '#5BAE8C',
+        error: '#D97787',
+        warning: '#D9A05B',
+        info: '#7B87D9',
       },
       tints: {
-        default: 'rgba(148, 163, 184, 0.14)',
-        success: 'rgba(16, 185, 129, 0.12)',
-        error: 'rgba(239, 68, 68, 0.1)',
-        warning: 'rgba(245, 158, 11, 0.12)',
-        info: 'rgba(59, 130, 246, 0.1)',
+        default: '#EDEAF6',
+        success: '#E3F2EB',
+        error: '#FBE7EA',
+        warning: '#FAF0DE',
+        info: '#E7EAFB',
       },
+      badgeSoft: {
+        default: '#ECEAF4',
+        success: '#E0F2EA',
+        error: '#FAE5E8',
+        warning: '#F9EFDD',
+        info: '#E6E9FA',
+      },
+      actionBg: '#EDEBFB',
+      actionText: '#6C63D9',
     },
     solid: {
       surface: '#FFFFFF',
-      border: 'rgba(15, 23, 42, 0.08)',
-      text: '#0F172A',
-      textMuted: 'rgba(15, 23, 42, 0.58)',
-      close: 'rgba(15, 23, 42, 0.42)',
+      border: '#ECE9F1',
+      text: '#4A4458',
+      textMuted: 'rgba(74, 68, 88, 0.58)',
+      close: 'rgba(74, 68, 88, 0.42)',
       accents: {
-        default: 'rgba(71, 85, 105, 0.95)',
-        success: 'rgba(5, 150, 105, 0.95)',
-        error: 'rgba(220, 38, 38, 0.95)',
-        warning: 'rgba(180, 83, 9, 0.95)',
-        info: 'rgba(29, 78, 216, 0.95)',
+        default: '#8B87A8',
+        success: '#5BAE8C',
+        error: '#D97787',
+        warning: '#D9A05B',
+        info: '#7B87D9',
       },
+      badgeSoft: {
+        default: '#F1EFF7',
+        success: '#E4F4EC',
+        error: '#FBE9EC',
+        warning: '#F9F0DF',
+        info: '#E8EBFA',
+      },
+      actionBg: '#EDEBFB',
+      actionText: '#6C63D9',
     },
   },
   dark: {
     glass: {
-      surface: 'rgba(10, 15, 22, 0.55)',
-      surfaceHighlight: 'rgba(255, 255, 255, 0.08)',
-      border: 'rgba(255, 255, 255, 0.12)',
-      text: '#F1F5F9',
-      textMuted: 'rgba(226, 232, 240, 0.62)',
-      close: 'rgba(226, 232, 240, 0.5)',
+      surface: '#26233A',
+      surfaceHighlight: 'rgba(255, 255, 255, 0.06)',
+      border: '#383452',
+      text: '#E4E1F2',
+      textMuted: 'rgba(228, 225, 242, 0.6)',
+      close: 'rgba(228, 225, 242, 0.48)',
       accents: {
-        default: 'rgba(203, 213, 225, 0.95)',
-        success: 'rgba(52, 211, 153, 0.95)',
-        error: 'rgba(248, 113, 113, 0.95)',
-        warning: 'rgba(251, 191, 36, 0.95)',
-        info: 'rgba(96, 165, 250, 0.95)',
+        default: '#A8A4C4',
+        success: '#8CCBB2',
+        error: '#E39AA6',
+        warning: '#E3BD8C',
+        info: '#9AA8E3',
       },
       tints: {
-        default: 'rgba(148, 163, 184, 0.12)',
-        success: 'rgba(16, 185, 129, 0.16)',
-        error: 'rgba(239, 68, 68, 0.16)',
-        warning: 'rgba(245, 158, 11, 0.16)',
-        info: 'rgba(59, 130, 246, 0.16)',
+        default: '#312E47',
+        success: '#24382F',
+        error: '#3B2A2F',
+        warning: '#3A3226',
+        info: '#282E42',
       },
+      badgeSoft: {
+        default: '#332F4A',
+        success: '#26382F',
+        error: '#3B2A2F',
+        warning: '#3A3226',
+        info: '#282E42',
+      },
+      actionBg: '#373352',
+      actionText: '#B4ADEF',
     },
     solid: {
-      surface: '#171D28',
-      border: 'rgba(255, 255, 255, 0.08)',
-      text: '#F1F5F9',
-      textMuted: 'rgba(226, 232, 240, 0.6)',
-      close: 'rgba(226, 232, 240, 0.5)',
+      surface: '#26233A',
+      border: '#383452',
+      text: '#E4E1F2',
+      textMuted: 'rgba(228, 225, 242, 0.6)',
+      close: 'rgba(228, 225, 242, 0.48)',
       accents: {
-        default: 'rgba(203, 213, 225, 0.95)',
-        success: 'rgba(52, 211, 153, 0.95)',
-        error: 'rgba(248, 113, 113, 0.95)',
-        warning: 'rgba(251, 191, 36, 0.95)',
-        info: 'rgba(96, 165, 250, 0.95)',
+        default: '#A8A4C4',
+        success: '#8CCBB2',
+        error: '#E39AA6',
+        warning: '#E3BD8C',
+        info: '#9AA8E3',
       },
+      badgeSoft: {
+        default: '#332F4A',
+        success: '#26382F',
+        error: '#3B2A2F',
+        warning: '#3A3226',
+        info: '#282E42',
+      },
+      actionBg: '#373352',
+      actionText: '#B4ADEF',
     },
   },
 }
 
 export const DEFAULT_PROVIDER: Omit<
   Required<ToastProviderProps>,
-  'children' | 'onToastDismiss'
+  'children' | 'onToastDismiss' | 'action' | 'borderRadius' | 'fontFamily'
 > = {
   position: 'top',
   duration: 4000,
@@ -106,9 +143,12 @@ export const DEFAULT_PROVIDER: Omit<
   stackMode: 'stack',
   stackGap: 'normal',
   inset: 12,
-  blur: 20,
+  blur: 0,
   animatedIcon: true,
   portal: true,
+  animation: 'spring' as ToastAnimation,
+  width: 'full' as const,
+  iconBadge: 'solid' as const,
 }
 
 /** Visual metrics per variant: radius, border width and horizontal padding. */
@@ -116,20 +156,27 @@ export const VARIANT_METRICS: Record<
   ToastVariant,
   { radius: number; borderWidth: number; paddingX: number }
 > = {
-  toast: { radius: 20, borderWidth: 1, paddingX: 14 },
-  notification: { radius: 26, borderWidth: 1, paddingX: 16 },
-  popover: { radius: 14, borderWidth: 1, paddingX: 12 },
-  glass: { radius: 24, borderWidth: 1, paddingX: 14 },
+  toast: { radius: 999, borderWidth: 1, paddingX: 20 },
+  notification: { radius: 999, borderWidth: 1, paddingX: 22 },
+  popover: { radius: 20, borderWidth: 1, paddingX: 18 },
+  glass: { radius: 26, borderWidth: 1, paddingX: 20 },
 }
 
 /** Size presets: icon, title, description, close sizes and vertical rhythm. */
 export const SIZE_METRICS: Record<
   ToastSize,
-  { icon: number; title: number; description: number; paddingY: number; gap: number; close: number }
+  { icon: number; title: number; description: number; paddingY: number; gap: number; close: number; badge: number }
 > = {
-  sm: { icon: 16, title: 13, description: 11, paddingY: 8, gap: 2, close: 12 },
-  md: { icon: 20, title: 15, description: 13, paddingY: 10, gap: 3, close: 14 },
-  lg: { icon: 26, title: 17, description: 15, paddingY: 13, gap: 4, close: 16 },
+  sm: { icon: 14, title: 13, description: 11, paddingY: 12, gap: 2, close: 12, badge: 32 },
+  md: { icon: 18, title: 15, description: 13, paddingY: 15, gap: 3, close: 14, badge: 40 },
+  lg: { icon: 24, title: 17, description: 15, paddingY: 18, gap: 4, close: 16, badge: 48 },
+}
+
+/** Call-to-action button metrics per size. */
+export const ACTION_METRICS: Record<ToastSize, { fontSize: number; paddingX: number; paddingY: number }> = {
+  sm: { fontSize: 11, paddingX: 11, paddingY: 5 },
+  md: { fontSize: 13, paddingX: 14, paddingY: 7 },
+  lg: { fontSize: 15, paddingX: 17, paddingY: 9 },
 }
 
 /** Spacing between stacked toasts, in dp/px. */
@@ -147,4 +194,12 @@ export const ANIMATION = {
   enter: 420,
   exit: 240,
   stack: 280,
+}
+
+/** Spring configs per animation preset. */
+export const ANIMATION_SPRINGS: Record<ToastAnimation, { damping: number; stiffness: number; mass: number }> = {
+  spring: { damping: 17, stiffness: 210, mass: 0.8 },
+  bounce: { damping: 9, stiffness: 260, mass: 0.7 },
+  slide: { damping: 26, stiffness: 180, mass: 1 },
+  fade: { damping: 26, stiffness: 180, mass: 1 },
 }

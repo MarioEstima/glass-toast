@@ -4,7 +4,17 @@ import { DEFAULT_PROVIDER } from '../constants/defaults'
 /** Provider-level resolved options shared by all toasts. */
 export type ProviderDefaults = Pick<
   ToastConfig,
-  'position' | 'duration' | 'dismissible' | 'variant' | 'size' | 'accessibilityLive'
+  | 'position'
+  | 'duration'
+  | 'dismissible'
+  | 'variant'
+  | 'size'
+  | 'accessibilityLive'
+  | 'animation'
+  | 'width'
+  | 'iconBadge'
+  | 'fontFamily'
+  | 'borderRadius'
 >
 
 /**
@@ -26,6 +36,12 @@ export function mergeToastOptions(
     variant: options?.variant ?? provider.variant,
     size: options?.size ?? provider.size,
     accessibilityLive: options?.accessibilityLive ?? provider.accessibilityLive,
+    animation: options?.animation ?? provider.animation,
+    width: options?.width ?? provider.width,
+    iconBadge: options?.iconBadge ?? provider.iconBadge,
+    fontFamily: options?.fontFamily ?? provider.fontFamily,
+    borderRadius: options?.borderRadius ?? provider.borderRadius,
+    action: options?.action,
     onPress: options?.onPress,
     onDismiss: options?.onDismiss,
     icon: options?.icon,
@@ -42,5 +58,10 @@ export function resolveProviderDefaults(props: ToastProviderProps): ProviderDefa
     variant: props.variant ?? DEFAULT_PROVIDER.variant,
     size: props.size ?? DEFAULT_PROVIDER.size,
     accessibilityLive: 'polite',
+    animation: props.animation ?? DEFAULT_PROVIDER.animation,
+    width: props.width ?? DEFAULT_PROVIDER.width,
+    iconBadge: props.iconBadge ?? DEFAULT_PROVIDER.iconBadge,
+    fontFamily: props.fontFamily ?? '',
+    borderRadius: props.borderRadius ?? 0,
   }
 }

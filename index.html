@@ -7,7 +7,11 @@
     <title>glass-toast</title>
   </head>
   <body>
-    <script>window['__DEV__'] = window['__DEV__'] || true; window['global'] = window['global'] || window;</script>
+    <script>
+      window['__DEV__'] = window['__DEV__'] || true; window['global'] = window['global'] || window;
+      // Apply the theme before React mounts to avoid a flash of the wrong scheme.
+      document.documentElement.dataset.scheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

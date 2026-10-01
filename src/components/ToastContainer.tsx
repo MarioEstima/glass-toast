@@ -13,6 +13,8 @@ type SurfaceProps = {
   tokens: ToastThemeTokens
   blur: number
   animatedIcon: boolean
+  /** Called when a toast's action button is pressed. */
+  onActionPress: (toast: ToastEntry) => void
 }
 
 type MaterialTokens = GlassTokens | SolidTokens
@@ -66,7 +68,7 @@ function columnOf(position: string): Column {
  */
 export function ToastContainer(props: ContainerProps) {
   const { side, toasts, surfaceProps, stackProps, onDismiss, onRemoved } = props
-  const { scheme, tokens, blur, animatedIcon } = surfaceProps
+  const { scheme, tokens, blur, animatedIcon, onActionPress } = surfaceProps
   const { stackMode, stackGap, inset } = stackProps
 
   const [heights, setHeights] = useState<Record<string, number>>({})
@@ -114,18 +116,34 @@ export function ToastContainer(props: ContainerProps) {
                   side={side}
                   column={column}
                   exiting={toast.exiting}
+                  animation={toast.animation}
                   tuckOffset={tuckOffset}
                   onExited={() => onRemoved(toast.id)}
-                  style={[styles.toastWrapper, { marginTop, zIndex: 50 - depth, elevation: 50 - depth }]}
+                  style={[styles.toastWrapper, toast.width === 'hug' && styles.hugWrapper, { marginTop, zIndex: 50 - depth, elevation: 50 - depth }]}
                 >
                   <View
                     onLayout={(event) => measure(toast.id, event.nativeEvent.layout.height)}
                     style={styles.measurer}
                     pointerEvents="box-none"
                   >
-                    <GlassSurface scheme={scheme} tokens={materialOf(tokens, toast.variant)} variant={toast.variant} blur={blur}>
-                      <ToastContent toast={toast} tokens={materialOf(tokens, toast.variant)} animatedIcon={animatedIcon} />
-                      {toast.dismissible ? (
+                    <GlassSurface
+                      scheme={scheme}
+                      tokens={materialOf(tokens, toast.variant)}
+                      variant={toast.variant}
+                      blur={blur}
+                      width={toast.width}
+                      borderRadius={toast.borderRadius}
+                    >
+                      <ToastContent
+                        toast={toast}
+                        tokens={materialOf(tokens, toast.variant)}
+                        animatedIcon={animatedIcon}
+                        onActionPress={(action) => {
+                          action?.onPress()
+                          onActionPress(toast)
+                        }}
+                      />
+                      {toast.dismissible && !toast.action ? (
                         <ToastClose
                           tokens={materialOf(tokens, toast.variant)}
                           size={toast.size}
@@ -160,6 +178,10 @@ const styles = StyleSheet.create({
   toastWrapper: {
     width: '100%',
     maxWidth: 420,
+  },
+  hugWrapper: {
+    width: 'auto',
+    alignSelf: 'auto',
   },
   measurer: {
     width: '100%',

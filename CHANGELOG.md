@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-10-01
+
+### Added
+
+- **Action button** — `action: { label, onPress }` renders a call-to-action pill (e.g. `GOT IT`) inside the toast; it replaces the close button and dismisses the toast after the callback.
+- **Animation presets** — provider/toast `animation`: `'spring'` (default), `'bounce'`, `'slide'` or `'fade'`.
+- **Layout options** — provider/toast `width` (`'full'` | `'hug'` content-width pills) and `borderRadius` override.
+- **Typography option** — provider/toast `fontFamily` applied to title, description and action.
+- **Icon badge styles** — `iconBadge`: `'solid'` (colored circle with white glyph, default), `'soft'` (tinted circle) or `'bare'` (icon only).
+
+### Changed
+
+- **Pastel opaque design** — light and dark palettes reworked into soft pastel tones with fully opaque surfaces (no transparency by default).
+- **Pill shape** — `toast` and `notification` variants are fully rounded pills; more generous padding on every size.
+- `blur` is now opt-in (default `0`); pass `blur={20}` on web to restore the translucent backdrop-filter effect on the `glass` variant.
+
 ## [0.1.0] - 2026-10-01
 
 ### Added

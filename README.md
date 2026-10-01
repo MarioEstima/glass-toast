@@ -1,6 +1,8 @@
 # Glass Toast
 
-A lightweight, cross-platform toast notification library for **React Native** and **Web**, with a *liquid glass* look: translucent surfaces, backdrop blur, light borders and real depth between stacked toasts.
+A lightweight, cross-platform toast notification library for **React Native** and **Web** — opaque pastel pill toasts with circular icon badges, action buttons (`GOT IT`), animated icons, light/dark themes and deep customization (sizes, fonts, animations, layout).
+
+![glass-toast toasts](src/assets/screenshot.png)
 
 [![npm version](https://img.shields.io/npm/v/glass-toast.svg)](https://www.npmjs.com/package/glass-toast)
 [![npm downloads](https://img.shields.io/npm/dm/glass-toast.svg)](https://www.npmjs.com/package/glass-toast)
@@ -8,20 +10,20 @@ A lightweight, cross-platform toast notification library for **React Native** an
 
 ## Status
 
-Glass Toast is currently targeting its first release:
-
 ```text
-v0.1.0
+v0.2.0
 ```
 
 The API may change before the first stable release.
 
 ## Highlights
 
-- **Liquid glass with depth** — translucent surfaces, backdrop blur (web), sheen, light ring and soft shadows; stacked toasts *tuck* behind the active one with scale and fade.
+- **Pastel pill design** — fully rounded, opaque pastel surfaces with a circular icon badge and soft depth shadows, in light and dark themes.
+- **Action buttons** — `action: { label, onPress }` renders a call-to-action pill (`GOT IT`) that replaces the close button.
+- **Animation presets** — `spring`, `bounce`, `slide` or `fade` enter/exit styles, provider- or toast-level.
 - **Light / dark / system theme** — follows the OS appearance live (`prefers-color-scheme` on web, `Appearance` on native) or can be forced.
-- **Animated icons** — lucide glyphs (`Check`, `X`, `AlertTriangle`, `Info`, `Bell`) with spring pop + fade/rise intro beats, driven by Reanimated. Custom icons via the `icon` option.
-- **4 variants** — `toast`, `notification`, `popover` (solid cards) and `glass` (the liquid-glass material).
+- **Animated icons** — lucide glyphs (`Check`, `X`, `AlertTriangle`, `Info`, `Bell`) with spring pop + fade/rise intro beats, driven by Reanimated. Custom icons via the `icon` option; `iconBadge` styles: `solid`, `soft`, `bare`.
+- **4 variants** — `toast`, `notification`, `popover` and `glass` (opt-in liquid glass with `blur`).
 - **3 sizes** — `sm`, `md`, `lg`.
 - **6 positions** — `top`, `top-left`, `top-right`, `bottom`, `bottom-left`, `bottom-right`.
 - **Smart stacking** — collapsed stack with peek (`stack`) or plain list (`list`), with tight/normal/loose gaps.
@@ -126,6 +128,12 @@ toast.dismissAll();
 | `onDismiss`          | `() => void`                              | Called after dismissal, for any reason             |
 | `variant`            | `'toast' \| 'notification' \| 'popover' \| 'glass'` | Visual variant (`glass` = liquid glass material)  |
 | `size`               | `'sm' \| 'md' \| 'lg'`                    | Size preset                                        |
+| `action`             | `{ label: string; onPress: () => void }`  | Call-to-action button (e.g. `GOT IT`); replaces the close button and dismisses the toast after the callback |
+| `animation`          | `'spring' \| 'bounce' \| 'slide' \| 'fade'` | Enter/exit animation style                        |
+| `borderRadius`       | `number`                                  | Corner radius override (`0` = variant default)     |
+| `width`              | `'full' \| 'hug'`                         | Fill the max width or hug the content              |
+| `fontFamily`         | `string`                                  | Font family for title, description and action      |
+| `iconBadge`          | `'solid' \| 'soft' \| 'bare'`             | Leading icon badge style                           |
 | `icon`               | `ComponentType<ToastIconProps>`           | Custom icon component                              |
 | `accessibilityLive`  | `'polite' \| 'assertive' \| 'off'`        | Screen reader announcement                         |
 
@@ -150,10 +158,15 @@ toast.success("Saved successfully.", { position: "bottom-right" });
   variant="notification"
   size="md"
   theme="system"        // 'system' | 'light' | 'dark'
+  animation="spring"    // 'spring' | 'bounce' | 'slide' | 'fade'
+  width="full"          // 'full' | 'hug' (content-width pill)
+  iconBadge="solid"     // 'solid' | 'soft' | 'bare'
+  fontFamily={undefined}// custom font family for texts
+  borderRadius={0}      // corner radius override (0 = variant default)
   stackMode="stack"     // 'stack' | 'list'
   stackGap="normal"     // 'tight' | 'normal' | 'loose'
   inset={12}            // distance from screen edges
-  blur={20}             // glass blur radius (web); 0 = opaque
+  blur={0}              // glass blur radius (web); 0 = opaque (default)
   animatedIcon
   portal                // render through a portal on web
   onToastDismiss={(t) => console.log('dismissed', t.id)}
@@ -166,16 +179,20 @@ Per-toast options override provider defaults.
 
 ## Liquid Glass & Depth
 
-The `glass` variant renders toasts in a liquid-glass material, built in layers:
+By default every variant renders as an **opaque pastel surface**. The `glass` variant keeps a soft pastel tint and a sheen overlay — pass `blur={20}` (or any value > 0) on web to restore the translucent `backdrop-filter: blur()` liquid-glass effect.
 
-1. **Translucent tinted base** with dual soft shadows (real `backdrop-filter: blur()` on web).
-2. **Sheen overlay** — the glass highlight.
-3. **Inner light ring** — sells the material edge.
-4. **Content**, above every layer.
+### Actions
 
-The `toast`, `notification` and `popover` variants render as opaque soft cards (light and dark palettes included).
+```tsx
+toast.show({
+  title: "Hit / to explore Experts",
+  type: "info",
+  duration: 0,
+  action: { label: "GOT IT", onPress: () => console.log("dismissed") },
+});
+```
 
-Stacked toasts add physical depth: toasts behind the active one **slide under it, scale down and fade**, leaving a 10 px peek of glass visible — the iOS-style collapsed stack. Choose `stackGap` (`tight` / `normal` / `loose`) to control spacing and `stackMode="list"` for a plain vertical list.
+Stacked toasts add physical depth: toasts behind the active one **slide under it, scale down and fade**, leaving a 10 px peek visible — the iOS-style collapsed stack. Choose `stackGap` (`tight` / `normal` / `loose`) to control spacing and `stackMode="list"` for a plain vertical list.
 
 On native, the same token palette and layered shadows apply; the backdrop blur degrades gracefully to the translucent tint (you can wrap your own blur view later without API changes).
 

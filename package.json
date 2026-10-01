@@ -1,7 +1,7 @@
 {
   "name": "glass-toast",
-  "version": "0.1.0",
-  "description": "A lightweight, cross-platform toast notification library for React Native and Web, with a liquid-glass look, light/dark themes, animated icons and multiple sizes and variants.",
+  "version": "0.2.0",
+  "description": "A lightweight, cross-platform toast notification library for React Native and Web — pastel pill toasts with action buttons, animated icons, light/dark themes and full customization (sizes, fonts, animations, layout).",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",

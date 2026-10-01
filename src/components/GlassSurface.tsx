@@ -1,7 +1,7 @@
 import { Platform, StyleSheet, View, type ViewStyle } from 'react-native'
 
 import type { ReactNode } from 'react'
-import type { ToastScheme, ToastVariant, GlassTokens, SolidTokens } from '../types/toast'
+import type { ToastScheme, ToastVariant, GlassTokens, SolidTokens, ToastWidth } from '../types/toast'
 import { VARIANT_METRICS } from '../constants/defaults'
 
 type MaterialTokens = GlassTokens | SolidTokens
@@ -11,25 +11,28 @@ const IS_WEB = Platform.OS === 'web'
 /**
  * Toast surface in two materials:
  *
- * - **glass** (liquid glass): translucent tinted base with a real
- *   `backdrop-filter` blur on web, a sheen overlay and an inner light ring.
- * - **solid** (toast / notification / popover): opaque soft card with a
- *   hairline border and depth shadows.
+ * - **glass**: soft pastel surface (opaque by default; add `blur > 0` on web
+ *   to restore the translucent backdrop-filter effect).
+ * - **solid**: opaque pastel card used by toast / notification / popover.
  *
- * Both share the same depth shadows and per-variant metrics.
+ * Both share the same depth shadows and per-variant metrics, with optional
+ * overrides for width behavior and corner radius.
  */
 export function GlassSurface(props: {
   scheme: ToastScheme
   tokens: MaterialTokens
   variant: ToastVariant
   blur: number
+  width?: ToastWidth
+  borderRadius?: number
   children?: ReactNode
   style?: ViewStyle | ViewStyle[]
 }) {
-  const { scheme, tokens, variant, blur, children, style } = props
+  const { scheme, tokens, variant, blur, width = 'full', borderRadius = 0, children, style } = props
   const metrics = VARIANT_METRICS[variant]
   const isGlass = variant === 'glass'
   const glass = isGlass ? (tokens as GlassTokens) : null
+  const radius = borderRadius > 0 ? borderRadius : metrics.radius
 
   const webBlur: ViewStyle | null =
     isGlass && IS_WEB && blur > 0
@@ -45,17 +48,18 @@ export function GlassSurface(props: {
     <View
       style={[
         styles.surface,
+        width === 'hug' && styles.hug,
         {
           backgroundColor: tokens.surface,
-          borderRadius: metrics.radius,
+          borderRadius: radius,
           borderWidth: metrics.borderWidth,
           borderColor: tokens.border,
           shadowColor,
-          shadowOpacity: scheme === 'dark' ? 0.45 : 0.16,
-          shadowRadius: 24,
-          shadowOffset: { width: 0, height: 12 },
-          elevation: 8,
-          boxShadow: `0 12px 32px rgba(2, 6, 23, ${scheme === 'dark' ? 0.45 : 0.14}), 0 2px 8px rgba(2, 6, 23, ${scheme === 'dark' ? 0.3 : 0.08})`,
+          shadowOpacity: scheme === 'dark' ? 0.4 : 0.14,
+          shadowRadius: 20,
+          shadowOffset: { width: 0, height: 10 },
+          elevation: 6,
+          boxShadow: `0 10px 28px rgba(2, 6, 23, ${scheme === 'dark' ? 0.4 : 0.12}), 0 2px 6px rgba(2, 6, 23, ${scheme === 'dark' ? 0.28 : 0.06})`,
         },
         webBlur,
         style,
@@ -64,13 +68,7 @@ export function GlassSurface(props: {
       {glass ? (
         <View
           pointerEvents="none"
-          style={[StyleSheet.absoluteFill, styles.sheen, { backgroundColor: glass.surfaceHighlight, borderRadius: metrics.radius }]}
-        />
-      ) : null}
-      {glass ? (
-        <View
-          pointerEvents="none"
-          style={[StyleSheet.absoluteFill, styles.innerRing, { borderColor: glass.border, borderRadius: Math.max(0, metrics.radius - 1) }]}
+          style={[StyleSheet.absoluteFill, styles.sheen, { backgroundColor: glass.surfaceHighlight, borderRadius: radius }]}
         />
       ) : null}
       <View style={styles.content}>{children}</View>
@@ -84,6 +82,10 @@ const styles = StyleSheet.create({
     maxWidth: 420,
     width: '100%',
   },
+  hug: {
+    width: 'auto',
+    alignSelf: 'flex-start',
+  },
   sheen: {
     position: 'absolute',
     left: 0,
@@ -91,14 +93,6 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     opacity: 0.5,
-  },
-  innerRing: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    borderWidth: 1,
   },
   content: {
     flexDirection: 'row',
