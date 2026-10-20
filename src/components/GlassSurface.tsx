@@ -22,6 +22,7 @@ export function GlassSurface(props: {
   const { scheme, tokens, variant, width = 'full', borderRadius = 0, dimensions, children, style } = props
   const metrics = VARIANT_METRICS[variant]
   const radius = borderRadius > 0 ? borderRadius : metrics.radius
+  const customWidth = width !== 'hug' && width !== 'full' ? width : dimensions?.width
 
   const shadowColor = scheme === 'dark' ? 'rgba(0, 0, 0, 1)' : 'rgba(15, 23, 42, 1)'
 
@@ -33,7 +34,7 @@ export function GlassSurface(props: {
         {
           backgroundColor: tokens.surface,
           paddingHorizontal: dimensions?.paddingHorizontal ?? metrics.paddingX,
-          width: dimensions?.width,
+          width: customWidth ?? (width === 'hug' ? 'auto' : '100%'),
           maxWidth: dimensions?.maxWidth ?? 420,
           height: dimensions?.height,
           minHeight: dimensions?.minHeight,

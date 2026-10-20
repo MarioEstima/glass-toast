@@ -11,7 +11,7 @@ A lightweight toast notification library for **React Native** — clean black an
 ## Status
 
 ```text
-v0.4.0
+v0.4.1
 ```
 
 The API may change before the first stable release.
@@ -138,7 +138,7 @@ toast.dismissAll();
 | `action`             | `{ label: string; onPress: () => void }`  | Call-to-action button (e.g. `GOT IT`); replaces the close button and dismisses the toast after the callback |
 | `animation`          | `'spring' \| 'bounce' \| 'slide' \| 'fade'` | Enter/exit animation style                        |
 | `borderRadius`       | `number`                                  | Corner radius override (`0` = variant default)     |
-| `width`              | `'full' \| 'hug'`                         | Fill the max width or hug the content              |
+| `width`              | `'full' \| 'hug' \| number \| \`${number}%\`` | Fill, hug, or set an exact width in dp or percent |
 | `fontFamily`         | `string`                                  | Font family for title, description and action      |
 | `iconBadge`          | `'solid' \| 'soft' \| 'bare'`             | Leading icon badge style                           |
 | `icon`               | `ComponentType<ToastIconProps>`           | Custom icon component                              |
@@ -167,7 +167,7 @@ toast.success("Saved successfully.", { position: "bottom-right" });
   showCloseButton={false} // hide the X globally
   theme="system"        // 'system' | 'light' | 'dark'
   animation="spring"    // 'spring' | 'bounce' | 'slide' | 'fade'
-  width="full"          // 'full' | 'hug' (content-width pill)
+  width="92%"           // 'full' | 'hug' | number | percentage
   iconBadge="solid"     // 'solid' | 'soft' | 'bare'
   fontFamily={undefined}// custom font family for texts
   borderRadius={0}      // corner radius override (0 = variant default)
@@ -185,10 +185,10 @@ Per-toast options override provider defaults.
 
 ## Custom dimensions
 
-Use `size` for a preset or override dimensions directly at the provider or on an individual toast. Values are in dp; `width` also accepts a percentage string.
+Use `size` for a preset or override dimensions directly at the provider or on an individual toast. Width accepts `full`, `hug`, a dp number or percentage string, and custom widths stay aligned to their selected screen position.
 
 ```tsx
-<ToastProvider dimensions={{ width: '92%', maxWidth: 520, minHeight: 72, paddingHorizontal: 24, paddingVertical: 18, titleFontSize: 18, descriptionFontSize: 14, iconSize: 24 }}>
+<ToastProvider width="92%" dimensions={{ maxWidth: 520, minHeight: 72, paddingHorizontal: 24, paddingVertical: 18, titleFontSize: 18, descriptionFontSize: 14, iconSize: 24 }}>
   <App />
 </ToastProvider>
 

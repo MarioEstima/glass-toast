@@ -16,7 +16,7 @@ export type ToastSize = 'sm' | 'md' | 'lg'
 export type ToastAnimation = 'spring' | 'bounce' | 'slide' | 'fade'
 
 /** Toast width behavior: fit the content or fill the max width. */
-export type ToastWidth = 'hug' | 'full'
+export type ToastWidth = 'hug' | 'full' | number | `${number}%`
 
 /** Rendering style of the leading icon badge. */
 export type IconBadgeStyle = 'solid' | 'soft' | 'bare'

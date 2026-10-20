@@ -118,7 +118,7 @@ export function ToastContainer(props: ContainerProps) {
                 >
                   <View
                     onLayout={(event) => measure(toast.id, event.nativeEvent.layout.height)}
-                    style={[styles.measurer, toast.dimensions?.maxWidth ? { maxWidth: toast.dimensions.maxWidth } : null, toast.dimensions?.width ? { width: toast.dimensions.width } : null]}
+                    style={[styles.measurer, toast.dimensions?.maxWidth ? { maxWidth: toast.dimensions.maxWidth } : null]}
                     pointerEvents="box-none"
                   >
                     <GlassSurface
@@ -128,6 +128,7 @@ export function ToastContainer(props: ContainerProps) {
                       width={toast.width}
                       borderRadius={toast.borderRadius}
                       dimensions={toast.dimensions}
+                      style={(toast.width !== 'full' && toast.width !== 'hug') || toast.dimensions?.width !== undefined ? { alignSelf: COLUMN_ALIGNMENT[column] } : undefined}
                     >
                       <ToastContent
                         toast={toast}
