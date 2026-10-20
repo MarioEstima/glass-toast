@@ -32,13 +32,13 @@ Expo
 ## Current Version
 
 ```text
-v0.3.0
+v0.3.2
 ```
 
 Status:
 
 ```text
-Feature-complete for v0.1.0 — pending publish
+Feature-complete; v0.3.2 is the current release candidate.
 ```
 
 The goal of `v0.1.0` is to establish the initial usable version of the library without introducing unnecessary complexity.

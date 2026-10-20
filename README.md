@@ -11,7 +11,7 @@ A lightweight toast notification library for **React Native** — opaque pastel 
 ## Status
 
 ```text
-v0.3.0
+v0.3.2
 ```
 
 The API may change before the first stable release.
