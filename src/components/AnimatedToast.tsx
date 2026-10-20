@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import Animated, {
   cancelAnimation,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -49,8 +50,13 @@ export function AnimatedToast(props: AnimatedToastProps) {
   useEffect(() => {
     if (exiting) {
       cancelAnimation(progress)
+      // The timing callback runs on the UI runtime (Reanimated 4 / Worklets);
+      // `onExited` is a JS-thread React closure, so it must be scheduled with
+      // `runOnJS` — calling it synchronously throws
+      // "Tried to synchronously call a Remote Function. Called 'anonymous' on
+      // the UI Runtime."
       progress.value = withTiming(0, { duration: ANIMATION.exit }, (finished) => {
-        if (finished) onExited()
+        if (finished) runOnJS(onExited)()
       })
     } else {
       progress.value = withSpring(1, ANIMATION_SPRINGS[animation])

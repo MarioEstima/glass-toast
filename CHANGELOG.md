@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Patch republish — published from the same commit as `0.2.0` (`bd831e9`); only the package version changed, no code or API differences.
 
+## [0.3.1] - 2026-10-20
+
+### Fixed
+
+- **Crash on toast exit with Reanimated 4 / `react-native-worklets`** — the exit animation callback (`withTiming`) runs on the UI runtime and called `onExited` synchronously, throwing `[Worklets] Tried to synchronously call a Remote Function. Called "anonymous" on the UI Runtime.` The completion callback is now scheduled with `runOnJS(onExited)()`.
+
 ## [0.3.0] - 2026-10-20
 
 ### Removed
