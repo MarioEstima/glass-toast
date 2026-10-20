@@ -33,7 +33,8 @@ export function ToastContent(props: {
     icon: dimensions?.iconSize ?? baseMetrics.icon,
     title: dimensions?.titleFontSize ?? baseMetrics.title,
     description: dimensions?.descriptionFontSize ?? baseMetrics.description,
-    paddingY: dimensions?.paddingVertical ?? baseMetrics.paddingY,
+    // Keep the original compact height unless custom vertical padding is set.
+    paddingY: dimensions?.paddingVertical ?? 0,
   }
   const Icon = toast.icon
   const badge = badgeBackground(toast.iconBadge, tokens, toast.type)

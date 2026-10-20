@@ -11,7 +11,7 @@ A lightweight toast notification library for **React Native** — clean black an
 ## Status
 
 ```text
-v0.4.1
+v0.4.2
 ```
 
 The API may change before the first stable release.
