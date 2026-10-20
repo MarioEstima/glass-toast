@@ -56,6 +56,13 @@ export function AnimatedToast(props: AnimatedToastProps) {
       // "Tried to synchronously call a Remote Function. Called 'anonymous' on
       // the UI Runtime."
       progress.value = withTiming(0, { duration: ANIMATION.exit }, (finished) => {
+        // Runs on the UI runtime. The directive is mandatory for a bundled
+        // library: the Worklets Babel plugin only auto-workletizes callbacks
+        // it recognises by callee name, and bundlers rename duplicate imports
+        // (e.g. `useAnimatedStyle` -> `useAnimatedStyle2`), which would leave
+        // this callback as a remote function and throw
+        // "Tried to synchronously call a Remote Function" in the consumer app.
+        'worklet'
         if (finished) runOnJS(onExited)()
       })
     } else {
@@ -69,6 +76,9 @@ export function AnimatedToast(props: AnimatedToastProps) {
   }, [tuckOffset, tuckProgress])
 
   const animated = useAnimatedStyle(() => {
+    // See the note in the exit callback: bundled libraries must workletize
+    // explicitly instead of relying on the plugin's name-based detection.
+    'worklet'
     const base = progress.value
     const tucked = tuckProgress.value
 

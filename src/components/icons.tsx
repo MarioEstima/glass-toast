@@ -27,7 +27,15 @@ function usePopIn(animated: boolean) {
   }, [animated, scale])
 
   return useAnimatedStyle(
-    () => ({ transform: [{ scale: scale.value }] }),
+    () => {
+      // Bundled libraries must workletize explicitly: the Worklets Babel plugin
+      // matches `useAnimatedStyle` by name, and bundlers rename the duplicated
+      // import (e.g. `useAnimatedStyle2`), leaving this callback a plain JS
+      // function. Running it on the UI runtime would throw
+      // "[Worklets] Tried to synchronously call a Remote Function".
+      'worklet'
+      return { transform: [{ scale: scale.value }] }
+    },
     [scale],
   )
 }
@@ -43,10 +51,14 @@ function useFadeRise(animated: boolean, from: number, delay: number) {
   }, [animated, progress, delay])
 
   return useAnimatedStyle(
-    () => ({
-      opacity: progress.value,
-      transform: [{ translateY: (1 - progress.value) * from }],
-    }),
+    () => {
+      // Explicit workletization — see the note in `usePopIn`.
+      'worklet'
+      return {
+        opacity: progress.value,
+        transform: [{ translateY: (1 - progress.value) * from }],
+      }
+    },
     [progress, from],
   )
 }
