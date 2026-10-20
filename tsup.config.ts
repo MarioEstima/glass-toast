@@ -13,5 +13,5 @@ export default defineConfig({
   clean: true,
   target: 'es2020',
   platform: 'neutral',
-  external: ['react', 'react-native', 'react-native-reanimated', 'react-native-web', 'react-native-svg'],
+  external: ['react', 'react-native', 'react-native-reanimated', 'react-native-svg'],
 })

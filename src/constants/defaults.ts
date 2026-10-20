@@ -10,8 +10,8 @@ import type {
 /**
  * Material palettes per color scheme — fully OPAQUE pastel surfaces.
  *
- * - `glass`: kept for the `glass` variant (soft pastel tint, no blur needed
- *   since the base is opaque).
+ * - `glass`: kept for the `glass` variant (soft pastel tint with a sheen
+ *   overlay on an opaque base).
  * - `solid`: pastel pill cards used by the toast / notification / popover
  *   variants.
  */
@@ -143,9 +143,7 @@ export const DEFAULT_PROVIDER: Omit<
   stackMode: 'stack',
   stackGap: 'normal',
   inset: 12,
-  blur: 0,
   animatedIcon: true,
-  portal: true,
   animation: 'spring' as ToastAnimation,
   width: 'full' as const,
   iconBadge: 'solid' as const,

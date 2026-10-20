@@ -1,4 +1,4 @@
-import { Platform, Pressable, StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 
 import type { GlassTokens, SolidTokens } from '../types/toast'
 import { SIZE_METRICS } from '../constants/defaults'
@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 6,
     opacity: 0.9,
-    cursor: Platform.select({ web: 'pointer' }) as never,
   },
   pressed: {
     opacity: 0.55,

@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-10-20
+
+### Removed
+
+- **Web support** — Glass Toast now targets React Native only (iOS / Android / Expo). `react-native-web` is no longer a supported target; stay on `v0.2.x` if you need the browser build.
+- **Portal rendering** — the `portal` provider option and the `react-dom` peer dependency are gone; overlays always render inline in the component tree.
+- **Backdrop blur option** — the `blur` provider option and the `GlassSurface` `blur` prop were removed (the effect only ever applied through CSS `backdrop-filter` on the web).
+- **Playground and web tooling** — Vite config, `index.html`, the browser demo (`src/App.tsx`, `src/main.tsx`), `public/`, `patches/` and the inline-playground script.
+
+### Changed
+
+- Overlays now always use `position: 'absolute'` (the web-only `fixed` layer is gone).
+- `useSystemColorScheme` relies solely on React Native's `Appearance`; the `prefers-color-scheme` media-query listener was dropped.
+- Web-only styles (`cursor`, `backdrop-filter`) were removed from the surfaces and buttons.
+- Peer dependencies reduced to `react`, `react-native`, `react-native-reanimated` and `react-native-svg` (optional).
+- Tooling: a single `tsconfig.json`, ESLint without the Vite / React-Refresh preset, and a new `npm test` script (`typecheck` + `lint` + `build` + `pack:check`).
+
 ## [0.2.0] - 2026-10-01
 
 ### Added

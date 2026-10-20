@@ -1,8 +1,8 @@
 # Glass Toast
 
-A lightweight, cross-platform toast notification library for **React Native** and **Web** — opaque pastel pill toasts with circular icon badges, action buttons (`GOT IT`), animated icons, light/dark themes and deep customization (sizes, fonts, animations, layout).
+A lightweight toast notification library for **React Native** — opaque pastel pill toasts with circular icon badges, action buttons (`GOT IT`), animated icons, light/dark themes and deep customization (sizes, fonts, animations, layout).
 
-![glass-toast toasts](src/assets/screenshot.png)
+![glass-toast toasts](https://raw.githubusercontent.com/MarioEstima/glass-toast/main/src/assets/screenshot.png)
 
 [![npm version](https://img.shields.io/npm/v/glass-toast.svg)](https://www.npmjs.com/package/glass-toast)
 [![npm downloads](https://img.shields.io/npm/dm/glass-toast.svg)](https://www.npmjs.com/package/glass-toast)
@@ -11,7 +11,7 @@ A lightweight, cross-platform toast notification library for **React Native** an
 ## Status
 
 ```text
-v0.2.0
+v0.3.0
 ```
 
 The API may change before the first stable release.
@@ -21,14 +21,14 @@ The API may change before the first stable release.
 - **Pastel pill design** — fully rounded, opaque pastel surfaces with a circular icon badge and soft depth shadows, in light and dark themes.
 - **Action buttons** — `action: { label, onPress }` renders a call-to-action pill (`GOT IT`) that replaces the close button.
 - **Animation presets** — `spring`, `bounce`, `slide` or `fade` enter/exit styles, provider- or toast-level.
-- **Light / dark / system theme** — follows the OS appearance live (`prefers-color-scheme` on web, `Appearance` on native) or can be forced.
+- **Light / dark / system theme** — follows the OS appearance live (`Appearance`) or can be forced.
 - **Animated icons** — lucide glyphs (`Check`, `X`, `AlertTriangle`, `Info`, `Bell`) with spring pop + fade/rise intro beats, driven by Reanimated. Custom icons via the `icon` option; `iconBadge` styles: `solid`, `soft`, `bare`.
-- **4 variants** — `toast`, `notification`, `popover` and `glass` (opt-in liquid glass with `blur`).
+- **4 variants** — `toast`, `notification`, `popover` and `glass` (pastel tint + sheen overlay).
 - **3 sizes** — `sm`, `md`, `lg`.
 - **6 positions** — `top`, `top-left`, `top-right`, `bottom`, `bottom-left`, `bottom-right`.
 - **Smart stacking** — collapsed stack with peek (`stack`) or plain list (`list`), with tight/normal/loose gaps.
 - **Imperative API** — `toast.success(...)` works inside or outside the React tree.
-- TypeScript-first, zero runtime dependencies, ~35 kB minified (ESM).
+- TypeScript-first, zero runtime dependencies, ~17 kB minified (ESM).
 
 ## Installation
 
@@ -36,9 +36,14 @@ The API may change before the first stable release.
 npm install glass-toast
 ```
 
-Peer dependencies: `react >= 18`, `react-native >= 0.74`, `react-native-reanimated >= 3.17` (`react-dom` and `react-native-svg` optional, for web portals and the built-in icons).
+Peer dependencies: `react >= 18`, `react-native >= 0.74`, `react-native-reanimated >= 3.17` and `react-native-svg >= 15` (optional peer — required by the built-in lucide icons; skip it only if every toast passes a custom `icon`).
 
-> On the web, alias `react-native` → `react-native-web` in your bundler and define the globals `__DEV__` and `global` (Metro usually provides them; Vite example below).
+`react-native-reanimated` requires its Babel plugin in your app:
+
+```js
+// babel.config.js
+plugins: ['react-native-reanimated/plugin']
+```
 
 ## Usage
 
@@ -126,7 +131,7 @@ toast.dismissAll();
 | `dismissible`        | `boolean`                                 | Whether the user can dismiss it                    |
 | `onPress`            | `() => void`                              | Called when the toast body is pressed              |
 | `onDismiss`          | `() => void`                              | Called after dismissal, for any reason             |
-| `variant`            | `'toast' \| 'notification' \| 'popover' \| 'glass'` | Visual variant (`glass` = liquid glass material)  |
+| `variant`            | `'toast' \| 'notification' \| 'popover' \| 'glass'` | Visual variant (`glass` = tinted surface + sheen)  |
 | `size`               | `'sm' \| 'md' \| 'lg'`                    | Size preset                                        |
 | `action`             | `{ label: string; onPress: () => void }`  | Call-to-action button (e.g. `GOT IT`); replaces the close button and dismisses the toast after the callback |
 | `animation`          | `'spring' \| 'bounce' \| 'slide' \| 'fade'` | Enter/exit animation style                        |
@@ -166,9 +171,7 @@ toast.success("Saved successfully.", { position: "bottom-right" });
   stackMode="stack"     // 'stack' | 'list'
   stackGap="normal"     // 'tight' | 'normal' | 'loose'
   inset={12}            // distance from screen edges
-  blur={0}              // glass blur radius (web); 0 = opaque (default)
   animatedIcon
-  portal                // render through a portal on web
   onToastDismiss={(t) => console.log('dismissed', t.id)}
 >
   <App />
@@ -179,7 +182,7 @@ Per-toast options override provider defaults.
 
 ## Liquid Glass & Depth
 
-By default every variant renders as an **opaque pastel surface**. The `glass` variant keeps a soft pastel tint and a sheen overlay — pass `blur={20}` (or any value > 0) on web to restore the translucent `backdrop-filter: blur()` liquid-glass effect.
+Every variant renders as an **opaque pastel surface**. The `glass` variant keeps a soft pastel tint and a sheen overlay — ideal if you later wrap it in your own blur view (`@react-native-blur-view/blur`, `expo-blur`, …) without any API changes.
 
 ### Actions
 
@@ -194,20 +197,21 @@ toast.show({
 
 Stacked toasts add physical depth: toasts behind the active one **slide under it, scale down and fade**, leaving a 10 px peek visible — the iOS-style collapsed stack. Choose `stackGap` (`tight` / `normal` / `loose`) to control spacing and `stackMode="list"` for a plain vertical list.
 
-On native, the same token palette and layered shadows apply; the backdrop blur degrades gracefully to the translucent tint (you can wrap your own blur view later without API changes).
-
 ## Hooks
 
 - `useToast()` — the toast API from context (same as the standalone `toast`).
 - `useToastTheme(preference)` — resolves `'system' | 'light' | 'dark'` into the active glass tokens (`GLASS_TOKENS` is also exported for custom surfaces).
+- `useSystemColorScheme()` — live `'light' | 'dark'` from the OS appearance (`Appearance`).
 
-## Cross-platform
+## Platform support
 
-Glass Toast is designed to provide a consistent API across:
+Glass Toast targets React Native only:
 
-- **Web** (via `react-native-web`)
-- **Android**
 - **iOS**
+- **Android**
+- **Expo** (and any other React Native runtime)
+
+> Web support (`react-native-web`) was removed in `v0.3.0`. If you relied on it, stay on `v0.2.x`.
 
 ## Development
 
@@ -215,12 +219,11 @@ Glass Toast is designed to provide a consistent API across:
 git clone https://github.com/MarioEstima/glass-toast.git
 cd glass-toast
 npm install
-npm run dev          # playground on http://localhost:5173
-npm run typecheck    # tsc -b
+npm test           # typecheck + lint + build + pack:check
+npm run typecheck  # tsc --noEmit
 npm run lint
-npm run build        # library build (tsup: dist/)
-npm run build:web    # playground build (dist-playground/)
-npm run pack:check   # npm pack --dry-run
+npm run build      # library build (tsup: dist/)
+npm run pack:check # npm pack --dry-run
 ```
 
 ## Contributing

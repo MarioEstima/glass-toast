@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import type { ToastEntry, ToastScheme, ToastThemeTokens, GlassTokens, SolidTokens } from '../types/toast'
 import { STACK_GAP, STACK_PEEK } from '../constants/defaults'
@@ -11,7 +11,6 @@ import { ToastClose } from './ToastClose'
 type SurfaceProps = {
   scheme: ToastScheme
   tokens: ToastThemeTokens
-  blur: number
   animatedIcon: boolean
   /** Called when a toast's action button is pressed. */
   onActionPress: (toast: ToastEntry) => void
@@ -45,9 +44,6 @@ type Column = 'left' | 'center' | 'right'
 
 const ESTIMATED_TOAST_HEIGHT = 64
 
-/** Fixed on web (portal + scrollable page); absolute on native. */
-const LAYER_POSITION = Platform.OS === 'web' ? 'fixed' : 'absolute'
-
 const COLUMN_ALIGNMENT: Record<Column, 'flex-start' | 'center' | 'flex-end'> = {
   left: 'flex-start',
   center: 'center',
@@ -68,7 +64,7 @@ function columnOf(position: string): Column {
  */
 export function ToastContainer(props: ContainerProps) {
   const { side, toasts, surfaceProps, stackProps, onDismiss, onRemoved } = props
-  const { scheme, tokens, blur, animatedIcon, onActionPress } = surfaceProps
+  const { scheme, tokens, animatedIcon, onActionPress } = surfaceProps
   const { stackMode, stackGap, inset } = stackProps
 
   const [heights, setHeights] = useState<Record<string, number>>({})
@@ -130,7 +126,6 @@ export function ToastContainer(props: ContainerProps) {
                       scheme={scheme}
                       tokens={materialOf(tokens, toast.variant)}
                       variant={toast.variant}
-                      blur={blur}
                       width={toast.width}
                       borderRadius={toast.borderRadius}
                     >
@@ -164,13 +159,13 @@ export function ToastContainer(props: ContainerProps) {
 
 const styles = StyleSheet.create({
   layer: {
-    position: LAYER_POSITION,
+    position: 'absolute',
     left: 0,
     right: 0,
     flexDirection: 'row',
     justifyContent: 'center',
     pointerEvents: 'box-none',
-  } as import('react-native').ViewStyle,
+  },
   column: {
     flex: 1,
     pointerEvents: 'box-none',

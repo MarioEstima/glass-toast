@@ -22,15 +22,17 @@ The project aims to provide:
 The primary platforms are:
 
 ```text
-Web
 Android
 iOS
+Expo
 ```
+
+> Since `v0.3.0` the library targets React Native only; web (`react-native-web`) support was dropped.
 
 ## Current Version
 
 ```text
-v0.1.0
+v0.3.0
 ```
 
 Status:
@@ -139,8 +141,6 @@ glass-toast/
 │   │
 │   └── index.ts
 │
-├── playground/
-│
 ├── README.md
 ├── CONTRIBUTING.md
 ├── CODE_OF_CONDUCT.md
@@ -151,7 +151,7 @@ glass-toast/
 │
 ├── package.json
 ├── tsconfig.json
-└── vite.config.ts
+└── tsup.config.ts
 ```
 
 The structure may evolve during development if a simpler or more maintainable organization is identified.
@@ -256,7 +256,7 @@ Avoid adding Zustand, Redux, or another external state-management library unless
 Rationale:
 
 * The library ships prebuilt (tsup); requiring consumers to run a NativeWind/Tailwind pipeline for a single component family would raise integration cost for little gain.
-* Tokens give full control over the liquid-glass material (translucency, blur, sheen, depth shadows) on both platforms without class-name translation layers.
+* Tokens give full control over the liquid-glass material (pastel tint, sheen, depth shadows) without class-name translation layers.
 * It follows the dependency philosophy: `nativewind` stays out of the runtime.
 
 Styling remains:
@@ -280,7 +280,7 @@ The initial animation system supports:
 * Toast leaving (timed slide + fade; the store owns the lifecycle and a fallback removal timer).
 * Toast stacking transitions (tuck under the active toast: slide, scale, fade).
 
-Because the library must work on the web without the Worklets Babel plugin, every Reanimated hook call passes an explicit dependency array (valid on web and native).
+Because the animation layer must stay predictable across React Native versions, every Reanimated hook call passes an explicit dependency array.
 
 Advanced gesture-based interactions are outside the initial `v0.1.0` scope.
 
@@ -292,17 +292,14 @@ Advanced gesture-based interactions are outside the initial `v0.1.0` scope.
 
 * [x] Initialize repository
 * [x] Configure TypeScript
-* [x] Configure Vite
 * [x] Configure library build (tsup)
 * [x] Configure package exports
 * [x] Configure package metadata
 
-## 2. Cross-platform Foundation
+## 2. React Native Foundation
 
-* [x] Configure React Native Web (alias + `__DEV__`/`global` globals)
 * [x] Configure styling tokens (see Styling decision — NativeWind dropped)
-* [x] Configure Reanimated (explicit dependency arrays for web)
-* [x] Verify Web compatibility (playground verified in browser)
+* [x] Configure Reanimated (explicit dependency arrays)
 * [x] Verify architecture for React Native (no web-only APIs in the core)
 
 ## 3. Types
@@ -364,7 +361,7 @@ Advanced gesture-based interactions are outside the initial `v0.1.0` scope.
 * [x] Enter animation
 * [x] Exit animation
 * [x] Stack transition
-* [x] Verify animation behavior on Web (verified in browser)
+* [x] Verify enter / exit / stack animation behavior
 
 ## 10. Visual Design
 
@@ -391,9 +388,8 @@ Advanced gesture-based interactions are outside the initial `v0.1.0` scope.
 * [x] Export public types
 * [x] Verify package entry point
 
-## 13. Playground
+## 13. Manual QA
 
-* [x] Create development playground
 * [x] Test every toast type
 * [x] Test positions
 * [x] Test dismissal
@@ -403,6 +399,7 @@ Advanced gesture-based interactions are outside the initial `v0.1.0` scope.
 
 ## 14. Testing
 
+* [x] `npm test` pipeline (`typecheck` + `lint` + `build` + `pack:check`)
 * [ ] Test toast creation
 * [ ] Test toast dismissal
 * [ ] Test automatic dismissal
@@ -485,7 +482,7 @@ Before introducing a dependency, consider:
 
 1. Is it necessary?
 2. Does it solve a meaningful problem?
-3. Does it support Web and React Native?
+3. Does it support React Native?
 4. Does it increase bundle size significantly?
 5. Is it actively maintained?
 6. Can the functionality reasonably be implemented internally?
@@ -523,8 +520,8 @@ Version `0.1.0` is considered ready when:
 * Toast stacking works.
 * Position configuration works.
 * Maximum visible toast configuration works.
-* Animations work on Web.
-* The architecture remains compatible with React Native.
+* Animations work on iOS and Android.
+* No web-only APIs are used in the public API or the core.
 * The public API is documented.
 * The package can be installed and used from another project.
 * No known critical issues remain.
@@ -551,9 +548,9 @@ Small components and focused modules are preferred over large monolithic compone
 
 Do not create abstractions without a demonstrated need.
 
-### Cross-platform by design
+### React Native first
 
-Web and React Native should be considered during architectural decisions, even when implementing Web first.
+Architectural decisions target React Native runtimes (iOS, Android, Expo); no web-only APIs in the core or public API.
 
 ### Developer experience matters
 

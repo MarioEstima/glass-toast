@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useSyncExternalStore,
-} from 'react'
-import { Platform } from 'react-native'
+import { useCallback, useEffect, useMemo, useSyncExternalStore } from 'react'
 import { ToastContext } from './ToastContext'
 import { createToastApi, setActiveToastApi } from '../core/toast-manager'
 import { createToastStore } from '../core/toast-store'
@@ -12,15 +6,12 @@ import { DEFAULT_PROVIDER } from '../constants/defaults'
 import { resolveProviderDefaults } from '../utils/merge-options'
 import { useToastTheme } from '../hooks/useToastTheme'
 import { ToastContainer } from '../components/ToastContainer'
-import { ToastPortal } from '../components/ToastPortal'
 
 import type {
   ToastAPI,
   ToastOptions,
   ToastProviderProps,
 } from '../types/toast'
-
-const IS_WEB = Platform.OS === 'web'
 
 /** Safety net for the exit animation, in ms. */
 const EXIT_FALLBACK_MS = 900
@@ -42,9 +33,7 @@ export function ToastProvider(props: ToastProviderProps) {
     stackMode = DEFAULT_PROVIDER.stackMode,
     stackGap = DEFAULT_PROVIDER.stackGap,
     inset = DEFAULT_PROVIDER.inset,
-    blur = DEFAULT_PROVIDER.blur,
     animatedIcon = DEFAULT_PROVIDER.animatedIcon,
-    portal = DEFAULT_PROVIDER.portal,
     animation = DEFAULT_PROVIDER.animation,
     borderRadius,
     width = DEFAULT_PROVIDER.width,
@@ -104,8 +93,8 @@ export function ToastProvider(props: ToastProviderProps) {
   }, [toasts, store])
 
   const surfaceProps = useMemo(
-    () => ({ scheme, tokens, blur, animatedIcon, onActionPress: (toast: import('../types/toast').ToastEntry) => store.dismiss(toast.id) }),
-    [scheme, tokens, blur, animatedIcon, store],
+    () => ({ scheme, tokens, animatedIcon, onActionPress: (toast: import('../types/toast').ToastEntry) => store.dismiss(toast.id) }),
+    [scheme, tokens, animatedIcon, store],
   )
 
   const stackProps = useMemo(
@@ -132,7 +121,7 @@ export function ToastProvider(props: ToastProviderProps) {
   return (
     <ToastContext.Provider value={api}>
       {children}
-      {portal && IS_WEB ? <ToastPortal>{overlays}</ToastPortal> : overlays}
+      {overlays}
     </ToastContext.Provider>
   )
 }

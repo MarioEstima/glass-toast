@@ -1,7 +1,7 @@
 {
   "name": "glass-toast",
-  "version": "0.2.0",
-  "description": "A lightweight, cross-platform toast notification library for React Native and Web — pastel pill toasts with action buttons, animated icons, light/dark themes and full customization (sizes, fonts, animations, layout).",
+  "version": "0.3.0",
+  "description": "A lightweight toast notification library for React Native — pastel pill toasts with action buttons, animated icons, light/dark themes and full customization (sizes, fonts, animations, layout).",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -21,7 +21,6 @@
   "sideEffects": false,
   "keywords": [
     "react-native",
-    "react-native-web",
     "toast",
     "notifications",
     "glass",
@@ -45,49 +44,35 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "dev": "vite",
     "build": "tsup",
-    "build:web": "tsc -b && vite build",
-    "typecheck": "tsc -b --force",
+    "typecheck": "tsc -p tsconfig.json",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "test": "npm run typecheck && npm run lint && npm run build && npm run pack:check",
     "pack:check": "npm pack --dry-run"
-  },  "peerDependencies": {
+  },
+  "peerDependencies": {
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0",
     "react-native": ">=0.74.0",
     "react-native-reanimated": ">=3.17.0",
     "react-native-svg": ">=15.0.0"
   },
   "peerDependenciesMeta": {
-    "react-dom": {
-      "optional": true
-    },
     "react-native-svg": {
       "optional": true
     }
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
-    "@vitejs/plugin-react": "^6.1.0",
     "eslint": "^10.9.0",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.4",
-    "globals": "^17.11.0",
-    "nativewind": "^4.2.6",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8",
     "react-native": "^0.87.1",
     "react-native-reanimated": "^4.6.0",
     "react-native-svg": "^15.15.5",
-    "react-native-web": "^0.21.2",
     "tsup": "^8.5.1",
     "typescript": "~6.0.2",
-    "typescript-eslint": "^8.67.0",
-    "vite": "^8.2.2"
+    "typescript-eslint": "^8.67.0"
   },
   "dependencies": {
     "lucide-react-native": "^1.49.0"

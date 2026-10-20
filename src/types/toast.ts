@@ -114,9 +114,9 @@ export interface ToastIconProps {
   color: string
 }
 
-/** Material tokens for the liquid-glass variant (translucent + blur). */
+/** Material tokens for the liquid-glass variant (pastel tint + sheen). */
 export interface GlassTokens {
-  /** Translucent base surface color. */
+  /** Base surface color. */
   surface: string
   /** Highlight overlay that simulates the glass sheen. */
   surfaceHighlight: string
@@ -198,12 +198,8 @@ export interface ToastProviderProps {
   stackGap?: StackGap
   /** Offset from the safe area edges. Default: `12`. */
   inset?: EdgeInset
-  /** Blur radius of the glass surface, in px. Default: `20`. Use `0` for opaque surfaces. */
-  blur?: number
   /** Enables the animated icon by default. Default: `true`. */
   animatedIcon?: boolean
-  /** Whether toasts are rendered inside a Portal on web. Default: `true`. */
-  portal?: boolean
   /** Called when any toast is dismissed. */
   onToastDismiss?: (toast: ToastConfig) => void
 }

@@ -33,11 +33,13 @@ cd glass-toast
 npm install
 ```
 
-### Start Development
+### Run the Checks
 
 ```bash
-npm run dev
+npm test
 ```
+
+This runs the full verification pipeline: `typecheck` + `lint` + `build` + `pack:check`.
 
 ### Build the Library
 
@@ -135,7 +137,7 @@ Toast Component
 
 The core toast logic should not depend directly on platform-specific UI implementations.
 
-This separation is important because Glass Toast targets both Web and React Native.
+This separation is important because Glass Toast targets React Native (iOS, Android, Expo) and its core must stay independent from any renderer.
 
 ## Dependencies
 
