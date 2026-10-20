@@ -1,11 +1,11 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 
-import type { GlassTokens, SolidTokens } from '../types/toast'
+import type { SolidTokens } from '../types/toast'
 import { SIZE_METRICS } from '../constants/defaults'
 
 /** Rounded close button drawn with two rotated bars (no vector dependency). */
 export function ToastClose(props: {
-  tokens: GlassTokens | SolidTokens
+  tokens: SolidTokens
   size: keyof typeof SIZE_METRICS
   onPress: () => void
 }) {

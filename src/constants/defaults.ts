@@ -8,131 +8,30 @@ import type {
 } from '../types/toast'
 
 /**
- * Material palettes per color scheme — fully OPAQUE pastel surfaces.
- *
- * - `glass`: kept for the `glass` variant (soft pastel tint with a sheen
- *   overlay on an opaque base).
- * - `solid`: pastel pill cards used by the toast / notification / popover
- *   variants.
+ * Monochrome opaque palettes used by every toast variant.
  */
-export const GLASS_TOKENS: Record<'light' | 'dark', ToastThemeTokens> = {
+export const THEME_TOKENS: Record<'light' | 'dark', ToastThemeTokens> = {
   light: {
-    glass: {
-      surface: '#F4F1FF',
-      surfaceHighlight: 'rgba(255, 255, 255, 0.6)',
-      border: '#E4DEF9',
-      text: '#3B3663',
-      textMuted: 'rgba(59, 54, 99, 0.62)',
-      close: 'rgba(59, 54, 99, 0.45)',
-      accents: {
-        default: '#8B87A8',
-        success: '#5BAE8C',
-        error: '#D97787',
-        warning: '#D9A05B',
-        info: '#7B87D9',
-      },
-      tints: {
-        default: '#EDEAF6',
-        success: '#E3F2EB',
-        error: '#FBE7EA',
-        warning: '#FAF0DE',
-        info: '#E7EAFB',
-      },
-      badgeSoft: {
-        default: '#ECEAF4',
-        success: '#E0F2EA',
-        error: '#FAE5E8',
-        warning: '#F9EFDD',
-        info: '#E6E9FA',
-      },
-      actionBg: '#EDEBFB',
-      actionText: '#6C63D9',
-    },
     solid: {
-      surface: '#FFFFFF',
-      border: '#ECE9F1',
-      text: '#4A4458',
-      textMuted: 'rgba(74, 68, 88, 0.58)',
-      close: 'rgba(74, 68, 88, 0.42)',
-      accents: {
-        default: '#8B87A8',
-        success: '#5BAE8C',
-        error: '#D97787',
-        warning: '#D9A05B',
-        info: '#7B87D9',
-      },
-      badgeSoft: {
-        default: '#F1EFF7',
-        success: '#E4F4EC',
-        error: '#FBE9EC',
-        warning: '#F9F0DF',
-        info: '#E8EBFA',
-      },
-      actionBg: '#EDEBFB',
-      actionText: '#6C63D9',
+      surface: '#FFFFFF', border: '#E5E5E5', text: '#111111', textMuted: '#555555', close: '#555555',
+      accents: { default: '#111111', success: '#111111', error: '#111111', warning: '#111111', info: '#111111' },
+      badgeSoft: { default: '#EEEEEE', success: '#EEEEEE', error: '#EEEEEE', warning: '#EEEEEE', info: '#EEEEEE' },
+      actionBg: '#111111', actionText: '#FFFFFF',
     },
   },
   dark: {
-    glass: {
-      surface: '#26233A',
-      surfaceHighlight: 'rgba(255, 255, 255, 0.06)',
-      border: '#383452',
-      text: '#E4E1F2',
-      textMuted: 'rgba(228, 225, 242, 0.6)',
-      close: 'rgba(228, 225, 242, 0.48)',
-      accents: {
-        default: '#A8A4C4',
-        success: '#8CCBB2',
-        error: '#E39AA6',
-        warning: '#E3BD8C',
-        info: '#9AA8E3',
-      },
-      tints: {
-        default: '#312E47',
-        success: '#24382F',
-        error: '#3B2A2F',
-        warning: '#3A3226',
-        info: '#282E42',
-      },
-      badgeSoft: {
-        default: '#332F4A',
-        success: '#26382F',
-        error: '#3B2A2F',
-        warning: '#3A3226',
-        info: '#282E42',
-      },
-      actionBg: '#373352',
-      actionText: '#B4ADEF',
-    },
     solid: {
-      surface: '#26233A',
-      border: '#383452',
-      text: '#E4E1F2',
-      textMuted: 'rgba(228, 225, 242, 0.6)',
-      close: 'rgba(228, 225, 242, 0.48)',
-      accents: {
-        default: '#A8A4C4',
-        success: '#8CCBB2',
-        error: '#E39AA6',
-        warning: '#E3BD8C',
-        info: '#9AA8E3',
-      },
-      badgeSoft: {
-        default: '#332F4A',
-        success: '#26382F',
-        error: '#3B2A2F',
-        warning: '#3A3226',
-        info: '#282E42',
-      },
-      actionBg: '#373352',
-      actionText: '#B4ADEF',
+      surface: '#111111', border: '#333333', text: '#FFFFFF', textMuted: '#BBBBBB', close: '#BBBBBB',
+      accents: { default: '#FFFFFF', success: '#FFFFFF', error: '#FFFFFF', warning: '#FFFFFF', info: '#FFFFFF' },
+      badgeSoft: { default: '#2A2A2A', success: '#2A2A2A', error: '#2A2A2A', warning: '#2A2A2A', info: '#2A2A2A' },
+      actionBg: '#FFFFFF', actionText: '#111111',
     },
   },
 }
 
 export const DEFAULT_PROVIDER: Omit<
   Required<ToastProviderProps>,
-  'children' | 'onToastDismiss' | 'action' | 'borderRadius' | 'fontFamily'
+  'children' | 'onToastDismiss' | 'action' | 'borderRadius' | 'fontFamily' | 'dimensions' | 'showCloseButton'
 > = {
   position: 'top',
   duration: 4000,
@@ -157,7 +56,6 @@ export const VARIANT_METRICS: Record<
   toast: { radius: 999, borderWidth: 1, paddingX: 20 },
   notification: { radius: 999, borderWidth: 1, paddingX: 22 },
   popover: { radius: 20, borderWidth: 1, paddingX: 18 },
-  glass: { radius: 26, borderWidth: 1, paddingX: 20 },
 }
 
 /** Size presets: icon, title, description, close sizes and vertical rhythm. */

@@ -13,7 +13,7 @@ export { useToastTheme } from './hooks/useToastTheme'
 export { useSystemColorScheme } from './hooks/useSystemColorScheme'
 
 // Theme tokens for custom surfaces
-export { GLASS_TOKENS } from './constants/defaults'
+export { THEME_TOKENS } from './constants/defaults'
 
 // Types
 export type {
@@ -30,12 +30,12 @@ export type {
   StackMode,
   StackGap,
   EdgeInset,
+  ToastDimensions,
   ToastOptions,
   ToastConfig,
   ToastEntry,
   ToastIconProps,
   ToastThemeTokens,
-  GlassTokens,
   SolidTokens,
   ToastProviderProps,
   ToastAPI,

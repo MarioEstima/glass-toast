@@ -29,6 +29,8 @@ export function ToastProvider(props: ToastProviderProps) {
     maxToasts = DEFAULT_PROVIDER.maxToasts,
     variant = DEFAULT_PROVIDER.variant,
     size = DEFAULT_PROVIDER.size,
+    dimensions,
+    showCloseButton = true,
     theme = DEFAULT_PROVIDER.theme,
     stackMode = DEFAULT_PROVIDER.stackMode,
     stackGap = DEFAULT_PROVIDER.stackGap,
@@ -47,21 +49,21 @@ export function ToastProvider(props: ToastProviderProps) {
 
   // One store for the provider's lifetime; config changes flow through setConfig.
   const store = useMemo(
-    () => createToastStore(resolveProviderDefaults({ position, duration, variant, size, animation, width, iconBadge, fontFamily, borderRadius }), maxToasts, EXIT_FALLBACK_MS),
+    () => createToastStore(resolveProviderDefaults({ position, duration, variant, size, dimensions, showCloseButton, animation, width, iconBadge, fontFamily, borderRadius }), maxToasts, EXIT_FALLBACK_MS),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
 
   useEffect(() => {
     store.setConfig({
-      providerDefaults: resolveProviderDefaults({ position, duration, variant, size, animation, width, iconBadge, fontFamily, borderRadius }),
+      providerDefaults: resolveProviderDefaults({ position, duration, variant, size, dimensions, showCloseButton, animation, width, iconBadge, fontFamily, borderRadius }),
       maxToasts,
       onFinalize: (entry) => {
         entry.onDismiss?.()
         onToastDismiss?.(entry)
       },
     })
-  }, [store, position, duration, maxToasts, variant, size, animation, width, iconBadge, fontFamily, borderRadius, onToastDismiss])
+  }, [store, position, duration, maxToasts, variant, size, dimensions, showCloseButton, animation, width, iconBadge, fontFamily, borderRadius, onToastDismiss])
 
   useEffect(() => () => store.clearTimers(), [store])
 

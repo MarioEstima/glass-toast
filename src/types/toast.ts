@@ -7,7 +7,7 @@ export type ToastType = 'default' | 'success' | 'error' | 'warning' | 'info'
 export type ToastPosition = 'top' | 'top-left' | 'top-right' | 'bottom' | 'bottom-left' | 'bottom-right'
 
 /** Visual variant of the toast surface. */
-export type ToastVariant = 'toast' | 'notification' | 'popover' | 'glass'
+export type ToastVariant = 'toast' | 'notification' | 'popover'
 
 /** Size preset controlling icon, text and paddings. */
 export type ToastSize = 'sm' | 'md' | 'lg'
@@ -29,14 +29,14 @@ export interface ToastAction {
   onPress: () => void
 }
 
-/** Color scheme used to render the glass surface. */
+/** Color scheme used to render the toast surface. */
 export type ToastTheme = 'light' | 'dark'
 
 /** Resolved color scheme alias. */
 export type ToastScheme = 'light' | 'dark'
 
 /**
- * How the glass depth effect is layered.
+ * How stacked toasts are arranged.
  * - `stack`: iOS-style collapsed stack; behind-toasts peek under the active one (default).
  * - `list`: toasts are laid out vertically without the collapsed-stack effect.
  */
@@ -47,6 +47,19 @@ export type StackGap = 'tight' | 'normal' | 'loose'
 
 /** Offset from the screen edges, in dp/px. */
 export type EdgeInset = number
+
+/** Per-toast dimensions and typography overrides, measured in dp. */
+export interface ToastDimensions {
+  width?: number | `${number}%`
+  maxWidth?: number
+  height?: number
+  minHeight?: number
+  paddingHorizontal?: number
+  paddingVertical?: number
+  iconSize?: number
+  titleFontSize?: number
+  descriptionFontSize?: number
+}
 
 export interface ToastOptions {
   /** Custom toast identifier. One is generated when omitted. */
@@ -71,6 +84,10 @@ export interface ToastOptions {
   variant?: ToastVariant
   /** Size preset. Overrides the provider default. */
   size?: ToastSize
+  /** Exact layout and text sizes; overrides the selected size preset. */
+  dimensions?: ToastDimensions
+  /** Show the close X when there is no action button. Default: true. */
+  showCloseButton?: boolean
   /** Call-to-action button. When present it replaces the close button. */
   action?: ToastAction
   /** Enter/exit animation style. Overrides the provider default. */
@@ -90,7 +107,7 @@ export interface ToastOptions {
 }
 
 export type ToastConfig = Required<
-  Omit<ToastOptions, 'icon' | 'accessibilityLive' | 'onPress' | 'onDismiss' | 'action' | 'borderRadius'>
+  Omit<ToastOptions, 'icon' | 'accessibilityLive' | 'onPress' | 'onDismiss' | 'action' | 'borderRadius' | 'dimensions'>
 > & {
   icon?: ComponentType<ToastIconProps>
   accessibilityLive: 'polite' | 'assertive' | 'off'
@@ -99,6 +116,8 @@ export type ToastConfig = Required<
   action?: ToastAction
   /** `0` resolves to the variant's default radius. */
   borderRadius: number
+  dimensions?: ToastDimensions
+  showCloseButton: boolean
 }
 
 /** Runtime state of a toast in the store. */
@@ -112,32 +131,6 @@ export interface ToastIconProps {
   type: ToastType
   size: number
   color: string
-}
-
-/** Material tokens for the liquid-glass variant (pastel tint + sheen). */
-export interface GlassTokens {
-  /** Base surface color. */
-  surface: string
-  /** Highlight overlay that simulates the glass sheen. */
-  surfaceHighlight: string
-  /** Border color. */
-  border: string
-  /** Primary text color. */
-  text: string
-  /** Secondary text color. */
-  textMuted: string
-  /** Close button color. */
-  close: string
-  /** Accent color per toast type: default, success, error, warning, info. */
-  accents: Record<ToastType, string>
-  /** Tint applied behind the glass per toast type. */
-  tints: Record<ToastType, string>
-  /** Soft badge background per toast type (circular icon holder). */
-  badgeSoft: Record<ToastType, string>
-  /** Background of the call-to-action button. */
-  actionBg: string
-  /** Text color of the call-to-action button. */
-  actionText: string
 }
 
 /** Material tokens for the solid card variants (toast / notification / popover). */
@@ -164,7 +157,6 @@ export interface SolidTokens {
 
 /** Resolved theme tokens consumed by the presentation components. */
 export interface ToastThemeTokens {
-  glass: GlassTokens
   solid: SolidTokens
 }
 
@@ -180,6 +172,10 @@ export interface ToastProviderProps {
   variant?: ToastVariant
   /** Size preset applied by default. Default: `'md'`. */
   size?: ToastSize
+  /** Default custom dimensions for all toasts. */
+  dimensions?: ToastDimensions
+  /** Whether to show the close X by default. Default: true. */
+  showCloseButton?: boolean
   /** Default enter/exit animation. Default: `'spring'`. */
   animation?: ToastAnimation
   /** Corner radius override for every toast. `0` uses each variant's default. */
@@ -192,7 +188,7 @@ export interface ToastProviderProps {
   iconBadge?: IconBadgeStyle
   /** Color scheme: `'system'` follows the OS appearance. Default: `'system'`. */
   theme?: ToastTheme | 'system'
-  /** Glass depth layering between toasts. Default: `'stack'`. */
+  /** Stack arrangement. Default: `'stack'`. */
   stackMode?: StackMode
   /** Spacing between stacked toasts. Default: `'normal'`. */
   stackGap?: StackGap

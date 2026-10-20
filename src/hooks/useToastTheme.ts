@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useSystemColorScheme } from './useSystemColorScheme'
-import { GLASS_TOKENS } from '../constants/defaults'
+import { THEME_TOKENS } from '../constants/defaults'
 import type { ToastThemeTokens } from '../types/toast'
 
 /**
@@ -9,7 +9,7 @@ import type { ToastThemeTokens } from '../types/toast'
  * - `'system'` follows the OS appearance live.
  * - `'light'` / `'dark'` are forced regardless of the OS setting.
  *
- * Returns the resolved scheme and the matching glass tokens.
+ * Returns the resolved scheme and matching monochrome theme tokens.
  */
 export function useToastTheme(preference: 'system' | 'light' | 'dark' | undefined): {
   scheme: 'light' | 'dark'
@@ -17,6 +17,6 @@ export function useToastTheme(preference: 'system' | 'light' | 'dark' | undefine
 } {
   const systemScheme = useSystemColorScheme()
   const scheme = preference && preference !== 'system' ? preference : systemScheme
-  const tokens = useMemo(() => GLASS_TOKENS[scheme], [scheme])
+  const tokens = useMemo(() => THEME_TOKENS[scheme], [scheme])
   return { scheme, tokens }
 }

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import type { ToastEntry, ToastScheme, ToastThemeTokens, GlassTokens, SolidTokens } from '../types/toast'
+import type { ToastEntry, ToastScheme, ToastThemeTokens, SolidTokens } from '../types/toast'
 import { STACK_GAP, STACK_PEEK } from '../constants/defaults'
 import { AnimatedToast } from './AnimatedToast'
 import { GlassSurface } from './GlassSurface'
@@ -16,11 +16,10 @@ type SurfaceProps = {
   onActionPress: (toast: ToastEntry) => void
 }
 
-type MaterialTokens = GlassTokens | SolidTokens
+type MaterialTokens = SolidTokens
 
-/** Resolves the material for a toast: liquid glass vs solid card. */
-function materialOf(tokens: ToastThemeTokens, variant: ToastEntry['variant']): MaterialTokens {
-  return variant === 'glass' ? tokens.glass : tokens.solid
+function materialOf(tokens: ToastThemeTokens): MaterialTokens {
+  return tokens.solid
 }
 
 type StackProps = {
@@ -119,28 +118,29 @@ export function ToastContainer(props: ContainerProps) {
                 >
                   <View
                     onLayout={(event) => measure(toast.id, event.nativeEvent.layout.height)}
-                    style={styles.measurer}
+                    style={[styles.measurer, toast.dimensions?.maxWidth ? { maxWidth: toast.dimensions.maxWidth } : null, toast.dimensions?.width ? { width: toast.dimensions.width } : null]}
                     pointerEvents="box-none"
                   >
                     <GlassSurface
                       scheme={scheme}
-                      tokens={materialOf(tokens, toast.variant)}
+                      tokens={materialOf(tokens)}
                       variant={toast.variant}
                       width={toast.width}
                       borderRadius={toast.borderRadius}
+                      dimensions={toast.dimensions}
                     >
                       <ToastContent
                         toast={toast}
-                        tokens={materialOf(tokens, toast.variant)}
+                        tokens={materialOf(tokens)}
                         animatedIcon={animatedIcon}
                         onActionPress={(action) => {
                           action?.onPress()
                           onActionPress(toast)
                         }}
                       />
-                      {toast.dismissible && !toast.action ? (
+                      {toast.dismissible && toast.showCloseButton && !toast.action ? (
                         <ToastClose
-                          tokens={materialOf(tokens, toast.variant)}
+                          tokens={materialOf(tokens)}
                           size={toast.size}
                           onPress={() => onDismiss(toast.id)}
                         />

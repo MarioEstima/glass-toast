@@ -1,19 +1,13 @@
 import { StyleSheet, View, type ViewStyle } from 'react-native'
 
 import type { ReactNode } from 'react'
-import type { ToastScheme, ToastVariant, GlassTokens, SolidTokens, ToastWidth } from '../types/toast'
+import type { ToastScheme, ToastVariant, SolidTokens, ToastWidth, ToastDimensions } from '../types/toast'
 import { VARIANT_METRICS } from '../constants/defaults'
 
-type MaterialTokens = GlassTokens | SolidTokens
+type MaterialTokens = SolidTokens
 
 /**
- * Toast surface in two materials:
- *
- * - **glass**: soft pastel surface with a sheen overlay.
- * - **solid**: opaque pastel card used by toast / notification / popover.
- *
- * Both share the same depth shadows and per-variant metrics, with optional
- * overrides for width behavior and corner radius.
+ * Opaque monochrome toast surface with optional layout overrides.
  */
 export function GlassSurface(props: {
   scheme: ToastScheme
@@ -21,13 +15,12 @@ export function GlassSurface(props: {
   variant: ToastVariant
   width?: ToastWidth
   borderRadius?: number
+  dimensions?: ToastDimensions
   children?: ReactNode
   style?: ViewStyle | ViewStyle[]
 }) {
-  const { scheme, tokens, variant, width = 'full', borderRadius = 0, children, style } = props
+  const { scheme, tokens, variant, width = 'full', borderRadius = 0, dimensions, children, style } = props
   const metrics = VARIANT_METRICS[variant]
-  const isGlass = variant === 'glass'
-  const glass = isGlass ? (tokens as GlassTokens) : null
   const radius = borderRadius > 0 ? borderRadius : metrics.radius
 
   const shadowColor = scheme === 'dark' ? 'rgba(0, 0, 0, 1)' : 'rgba(15, 23, 42, 1)'
@@ -39,6 +32,11 @@ export function GlassSurface(props: {
         width === 'hug' && styles.hug,
         {
           backgroundColor: tokens.surface,
+          paddingHorizontal: dimensions?.paddingHorizontal ?? metrics.paddingX,
+          width: dimensions?.width,
+          maxWidth: dimensions?.maxWidth ?? 420,
+          height: dimensions?.height,
+          minHeight: dimensions?.minHeight,
           borderRadius: radius,
           borderWidth: metrics.borderWidth,
           borderColor: tokens.border,
@@ -52,12 +50,6 @@ export function GlassSurface(props: {
         style,
       ]}
     >
-      {glass ? (
-        <View
-          pointerEvents="none"
-          style={[StyleSheet.absoluteFill, styles.sheen, { backgroundColor: glass.surfaceHighlight, borderRadius: radius }]}
-        />
-      ) : null}
       <View style={styles.content}>{children}</View>
     </View>
   )
@@ -72,14 +64,6 @@ const styles = StyleSheet.create({
   hug: {
     width: 'auto',
     alignSelf: 'flex-start',
-  },
-  sheen: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    opacity: 0.5,
   },
   content: {
     flexDirection: 'row',

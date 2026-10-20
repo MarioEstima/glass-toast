@@ -1,10 +1,10 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
-import type { GlassTokens, IconBadgeStyle, SolidTokens, ToastEntry } from '../types/toast'
+import type { IconBadgeStyle, SolidTokens, ToastEntry } from '../types/toast'
 import { ACTION_METRICS, SIZE_METRICS } from '../constants/defaults'
 import { ToastIcon } from './icons'
 
-type MaterialTokens = GlassTokens | SolidTokens
+type MaterialTokens = SolidTokens
 
 /** Resolves the background color of the circular icon badge. */
 function badgeBackground(style: IconBadgeStyle, tokens: MaterialTokens, type: ToastEntry['type']): string | undefined {
@@ -26,14 +26,22 @@ export function ToastContent(props: {
   onActionPress: (action: ToastEntry['action']) => void
 }) {
   const { toast, tokens, animatedIcon, onActionPress } = props
-  const metrics = SIZE_METRICS[toast.size]
+  const baseMetrics = SIZE_METRICS[toast.size]
+  const dimensions = toast.dimensions
+  const metrics = {
+    ...baseMetrics,
+    icon: dimensions?.iconSize ?? baseMetrics.icon,
+    title: dimensions?.titleFontSize ?? baseMetrics.title,
+    description: dimensions?.descriptionFontSize ?? baseMetrics.description,
+    paddingY: dimensions?.paddingVertical ?? baseMetrics.paddingY,
+  }
   const Icon = toast.icon
   const badge = badgeBackground(toast.iconBadge, tokens, toast.type)
   const glyph = glyphColor(toast.iconBadge, tokens, toast.type)
   const actionMetrics = ACTION_METRICS[toast.size]
 
   return (
-    <View style={styles.row}>
+    <View style={[styles.row, { paddingVertical: metrics.paddingY }]}>
       <View
         style={[
           styles.badge,

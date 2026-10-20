@@ -15,6 +15,8 @@ export type ProviderDefaults = Pick<
   | 'iconBadge'
   | 'fontFamily'
   | 'borderRadius'
+  | 'dimensions'
+  | 'showCloseButton'
 >
 
 /**
@@ -33,8 +35,10 @@ export function mergeToastOptions(
     duration: options?.duration ?? provider.duration,
     position: options?.position ?? provider.position,
     dismissible: options?.dismissible ?? true,
+    showCloseButton: options?.showCloseButton ?? provider.showCloseButton,
     variant: options?.variant ?? provider.variant,
     size: options?.size ?? provider.size,
+    dimensions: options?.dimensions ?? provider.dimensions,
     accessibilityLive: options?.accessibilityLive ?? provider.accessibilityLive,
     animation: options?.animation ?? provider.animation,
     width: options?.width ?? provider.width,
@@ -63,5 +67,7 @@ export function resolveProviderDefaults(props: ToastProviderProps): ProviderDefa
     iconBadge: props.iconBadge ?? DEFAULT_PROVIDER.iconBadge,
     fontFamily: props.fontFamily ?? '',
     borderRadius: props.borderRadius ?? 0,
+    dimensions: props.dimensions,
+    showCloseButton: props.showCloseButton ?? true,
   }
 }

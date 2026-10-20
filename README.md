@@ -1,6 +1,6 @@
 # Glass Toast
 
-A lightweight toast notification library for **React Native** — opaque pastel pill toasts with circular icon badges, action buttons (`GOT IT`), animated icons, light/dark themes and deep customization (sizes, fonts, animations, layout).
+A lightweight toast notification library for **React Native** — clean black and white pill toasts with circular icon badges, action buttons (`GOT IT`), animated icons, light/dark themes and deep customization (sizes, fonts, animations, layout).
 
 ![glass-toast toasts](https://raw.githubusercontent.com/MarioEstima/glass-toast/main/src/assets/screenshot.png)
 
@@ -11,19 +11,19 @@ A lightweight toast notification library for **React Native** — opaque pastel 
 ## Status
 
 ```text
-v0.3.2
+v0.4.0
 ```
 
 The API may change before the first stable release.
 
 ## Highlights
 
-- **Pastel pill design** — fully rounded, opaque pastel surfaces with a circular icon badge and soft depth shadows, in light and dark themes.
+- **Monochrome design** — clean black, white and gray surfaces that adapt to light and dark system appearance.
 - **Action buttons** — `action: { label, onPress }` renders a call-to-action pill (`GOT IT`) that replaces the close button.
 - **Animation presets** — `spring`, `bounce`, `slide` or `fade` enter/exit styles, provider- or toast-level.
 - **Light / dark / system theme** — follows the OS appearance live (`Appearance`) or can be forced.
 - **Animated icons** — lucide glyphs (`Check`, `X`, `AlertTriangle`, `Info`, `Bell`) with spring pop + fade/rise intro beats, driven by Reanimated. Custom icons via the `icon` option; `iconBadge` styles: `solid`, `soft`, `bare`.
-- **4 variants** — `toast`, `notification`, `popover` and `glass` (pastel tint + sheen overlay).
+- **3 variants** — `toast`, `notification` and `popover`, with no glass or sheen effects.
 - **3 sizes** — `sm`, `md`, `lg`.
 - **6 positions** — `top`, `top-left`, `top-right`, `bottom`, `bottom-left`, `bottom-right`.
 - **Smart stacking** — collapsed stack with peek (`stack`) or plain list (`list`), with tight/normal/loose gaps.
@@ -129,10 +129,12 @@ toast.dismissAll();
 | `duration`           | `number`                                  | ms before auto-dismiss (`0` = persistent)          |
 | `position`           | `'top' \| 'top-left' \| 'top-right' \| 'bottom' \| 'bottom-left' \| 'bottom-right'` | Screen corner |
 | `dismissible`        | `boolean`                                 | Whether the user can dismiss it                    |
+| `showCloseButton`    | `boolean`                                 | Show or hide the X close button                    |
+| `dimensions`         | `ToastDimensions`                         | Custom width, height, padding, icon and text sizes |
 | `onPress`            | `() => void`                              | Called when the toast body is pressed              |
 | `onDismiss`          | `() => void`                              | Called after dismissal, for any reason             |
-| `variant`            | `'toast' \| 'notification' \| 'popover' \| 'glass'` | Visual variant (`glass` = tinted surface + sheen)  |
-| `size`               | `'sm' \| 'md' \| 'lg'`                    | Size preset                                        |
+| `variant`            | `'toast' \| 'notification' \| 'popover'` | Visual variant |
+| `size`               | `'sm' \| 'md' \| 'lg'`                    | Size preset; `dimensions` can override individual values |
 | `action`             | `{ label: string; onPress: () => void }`  | Call-to-action button (e.g. `GOT IT`); replaces the close button and dismisses the toast after the callback |
 | `animation`          | `'spring' \| 'bounce' \| 'slide' \| 'fade'` | Enter/exit animation style                        |
 | `borderRadius`       | `number`                                  | Corner radius override (`0` = variant default)     |
@@ -162,6 +164,7 @@ toast.success("Saved successfully.", { position: "bottom-right" });
   maxToasts={5}
   variant="notification"
   size="md"
+  showCloseButton={false} // hide the X globally
   theme="system"        // 'system' | 'light' | 'dark'
   animation="spring"    // 'spring' | 'bounce' | 'slide' | 'fade'
   width="full"          // 'full' | 'hug' (content-width pill)
@@ -180,9 +183,19 @@ toast.success("Saved successfully.", { position: "bottom-right" });
 
 Per-toast options override provider defaults.
 
-## Liquid Glass & Depth
+## Custom dimensions
 
-Every variant renders as an **opaque pastel surface**. The `glass` variant keeps a soft pastel tint and a sheen overlay — ideal if you later wrap it in your own blur view (`@react-native-blur-view/blur`, `expo-blur`, …) without any API changes.
+Use `size` for a preset or override dimensions directly at the provider or on an individual toast. Values are in dp; `width` also accepts a percentage string.
+
+```tsx
+<ToastProvider dimensions={{ width: '92%', maxWidth: 520, minHeight: 72, paddingHorizontal: 24, paddingVertical: 18, titleFontSize: 18, descriptionFontSize: 14, iconSize: 24 }}>
+  <App />
+</ToastProvider>
+
+toast.show({ title: 'Saved', showCloseButton: false, dimensions: { width: 320, minHeight: 80, titleFontSize: 20 } });
+```
+
+`theme="system"` follows the app device appearance and switches between black and white palettes. Set `theme="light"` or `theme="dark"` to force a scheme.
 
 ### Actions
 
@@ -200,7 +213,7 @@ Stacked toasts add physical depth: toasts behind the active one **slide under it
 ## Hooks
 
 - `useToast()` — the toast API from context (same as the standalone `toast`).
-- `useToastTheme(preference)` — resolves `'system' | 'light' | 'dark'` into the active glass tokens (`GLASS_TOKENS` is also exported for custom surfaces).
+- `useToastTheme(preference)` — resolves `'system' | 'light' | 'dark'` into the active monochrome theme tokens (`THEME_TOKENS` is also exported for custom surfaces).
 - `useSystemColorScheme()` — live `'light' | 'dark'` from the OS appearance (`Appearance`).
 
 ## Platform support
