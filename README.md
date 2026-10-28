@@ -36,7 +36,7 @@ The API may change before the first stable release.
 npm install glass-toast
 ```
 
-Peer dependencies: `react >= 18`, `react-native >= 0.74`, `react-native-reanimated >= 3.17` and `react-native-svg >= 15` (optional peer — required by the built-in lucide icons; skip it only if every toast passes a custom `icon`).
+Peer dependencies: `react >= 18`, `react-native >= 0.74`, `react-native-reanimated >= 3.17` and `react-native-svg >= 15` (required by the built-in lucide icons; npm installs it automatically together with the library).
 
 `react-native-reanimated` requires its Babel plugin in your app:
 

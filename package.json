@@ -1,6 +1,6 @@
 {
   "name": "glass-toast",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "A lightweight toast notification library for React Native — monochrome pill toasts with action buttons, animated icons, light/dark themes and full customization (sizes, fonts, animations, layout).",
   "license": "MIT",
   "type": "module",
@@ -54,11 +54,6 @@
     "react-native": ">=0.74.0",
     "react-native-reanimated": ">=3.17.0",
     "react-native-svg": ">=15.0.0"
-  },
-  "peerDependenciesMeta": {
-    "react-native-svg": {
-      "optional": true
-    }
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

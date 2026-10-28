@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import type { IconBadgeStyle, SolidTokens, ToastEntry } from '../types/toast'
-import { ACTION_METRICS, SIZE_METRICS } from '../constants/defaults'
+import { ACTION_METRICS, SIZE_METRICS, VARIANT_METRICS } from '../constants/defaults'
 import { ToastIcon } from './icons'
 
 type MaterialTokens = SolidTokens
@@ -40,6 +40,10 @@ export function ToastContent(props: {
   const badge = badgeBackground(toast.iconBadge, tokens, toast.type)
   const glyph = glyphColor(toast.iconBadge, tokens, toast.type)
   const actionMetrics = ACTION_METRICS[toast.size]
+  // The surface's horizontal padding is what pushes the badge away from the
+  // toast's left border; cancel it only on the badge so it sits flush against
+  // the border (still vertically centered), without moving the texts.
+  const leadingInset = toast.dimensions?.paddingHorizontal ?? VARIANT_METRICS[toast.variant].paddingX
 
   return (
     <View style={[styles.row, { paddingVertical: metrics.paddingY }]}>
@@ -51,6 +55,7 @@ export function ToastContent(props: {
             height: metrics.badge,
             borderRadius: metrics.badge / 2,
             backgroundColor: badge,
+            marginLeft: -leadingInset,
             borderWidth: toast.iconBadge === 'bare' ? 0 : 1,
             borderColor: toast.iconBadge === 'soft' ? tokens.border : 'transparent',
           },
