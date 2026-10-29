@@ -6,11 +6,11 @@ import { ToastIcon } from './icons'
 
 type MaterialTokens = SolidTokens
 
+const ICON_HIGHLIGHT = 'rgba(128, 128, 128, 0.35)'
+
 /** Resolves the background color of the circular icon badge. */
-function badgeBackground(style: IconBadgeStyle, tokens: MaterialTokens, type: ToastEntry['type']): string | undefined {
-  if (style === 'solid') return tokens.accents[type]
-  if (style === 'soft') return tokens.badgeSoft[type]
-  return undefined
+function badgeBackground(style: IconBadgeStyle): string | undefined {
+  return style === 'bare' ? undefined : ICON_HIGHLIGHT
 }
 
 /** Resolves the glyph color inside the badge. */
@@ -37,7 +37,7 @@ export function ToastContent(props: {
     paddingY: dimensions?.paddingVertical ?? 0,
   }
   const Icon = toast.icon
-  const badge = badgeBackground(toast.iconBadge, tokens, toast.type)
+  const badge = badgeBackground(toast.iconBadge)
   const glyph = glyphColor(toast.iconBadge, tokens, toast.type)
   const actionMetrics = ACTION_METRICS[toast.size]
   // The surface's horizontal padding is what pushes the badge away from the
